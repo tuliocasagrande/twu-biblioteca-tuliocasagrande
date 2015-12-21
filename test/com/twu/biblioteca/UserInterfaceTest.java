@@ -15,7 +15,7 @@ public class UserInterfaceTest {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
-        new UserInterface();
+        UserInterface.welcome();
         assertEquals("Welcome!!! :D\n", outContent.toString());
 
         System.setOut(null);
