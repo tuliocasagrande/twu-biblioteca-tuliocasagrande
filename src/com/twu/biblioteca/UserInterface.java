@@ -13,4 +13,14 @@ public class UserInterface {
             System.out.println(b.getTitle() + " - by " + b.getAuthor());
         }
     }
+
+    public static void listBooksWithDetails(Book[] books) {
+        int i = 1;
+        System.out.printf("%-5s %-5s %-20s %s\n", "#", "Year", "Author", "Title");
+
+        for (Book b: books) {
+            System.out.printf("%-5s %-5s %-20s %s\n", i, b.getYearPublished(), b.getAuthor(), b.getTitle());
+            i++;
+        }
+    }
 }
