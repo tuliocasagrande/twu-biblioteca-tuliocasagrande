@@ -58,6 +58,9 @@ public class UserInterface {
                     System.out.println("That book is not available.");
                 }
                 break;
+            case 3:
+                returnBook(books);
+                break;
             case 0:
                 System.out.println("See you soon!");
                 break;
@@ -83,6 +86,31 @@ public class UserInterface {
             if (b.getId() == book_id) {
                 if (b.getStatus() == Book.Status.AVAILABLE) {
                     b.setStatus(Book.Status.BORROWED);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean returnBook(Book[] books) {
+        int book_id;
+        try {
+            book_id = Integer.parseInt(input.readLine());
+        } catch (IOException e) {
+            return false;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        // LINEAR SEARCH!!!
+        // If the books array is getting big, consider change it to a Hash
+        for (Book b: books) {
+            if (b.getId() == book_id) {
+                if (b.getStatus() == Book.Status.BORROWED) {
+                    b.setStatus(Book.Status.AVAILABLE);
                     return true;
                 } else {
                     return false;

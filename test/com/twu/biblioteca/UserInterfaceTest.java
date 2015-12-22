@@ -100,6 +100,14 @@ public class UserInterfaceTest {
     }
 
     @Test
+    public void optionThreeShouldReturnBook() throws Exception {
+        books[1].setStatus(Book.Status.BORROWED);
+        System.setIn(new ByteArrayInputStream("2".getBytes()));
+        new UserInterface().handleOption(3, books);
+        assertTrue(books[1].getStatus() == Book.Status.AVAILABLE);
+    }
+
+    @Test
     public void borrowedBookShouldNotBeListed() throws Exception {
         System.setIn(new ByteArrayInputStream("1".getBytes()));
         new UserInterface().checkoutBook(books);
