@@ -75,4 +75,16 @@ public class UserInterfaceTest {
 
         assertEquals(printed, outContent.toString());
     }
+
+    @Test
+    public void invalidOptionShouldNotifyUser() throws Exception {
+        userInterface.handleOption(-1, books);
+        assertEquals("Select a valid option!\n", outContent.toString());
+    }
+
+    @Test
+    public void optionZeroShouldQuitProgram() throws Exception {
+        userInterface.handleOption(0, books);
+        assertEquals("See you soon!\n", outContent.toString());
+    }
 }

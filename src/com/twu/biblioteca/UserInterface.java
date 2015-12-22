@@ -20,7 +20,7 @@ public class UserInterface {
         System.out.println("Main menu:");
         System.out.println("<1> List Books");
         System.out.println("<0> Quit");
-        System.out.print("Choose an option: ");;
+        System.out.print("Choose an option: ");
     }
 
     public void listBooks(Book[] books) {
