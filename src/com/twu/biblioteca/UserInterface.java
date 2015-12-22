@@ -19,6 +19,7 @@ public class UserInterface {
     public void menu() {
         System.out.println("Main menu:");
         System.out.println("<1> List Books");
+        System.out.println("<2> Checkout Book");
         System.out.println("<0> Quit");
         System.out.print("Choose an option: ");
     }
@@ -50,6 +51,9 @@ public class UserInterface {
             case 1:
                 listBooks(books);
                 break;
+            case 2:
+                checkoutBook(books);
+                break;
             case 0:
                 System.out.println("See you soon!");
                 break;
@@ -57,5 +61,30 @@ public class UserInterface {
             default:
                 System.out.println("Select a valid option!");
         }
+    }
+
+    private boolean checkoutBook(Book[] books) {
+        int book_id;
+        try {
+            book_id = Integer.parseInt(input.readLine());
+        } catch (IOException e) {
+            return false;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        // LINEAR SEARCH!!!
+        // If the books array is getting big, consider change it to a Hash
+        for (Book b: books) {
+            if (b.getId() == book_id) {
+                if (b.getStatus() == Book.Status.AVAILABLE) {
+                    b.setStatus(Book.Status.BORROWED);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 }

@@ -22,9 +22,6 @@ public class UserInterfaceTest {
     public void setUp() throws Exception {
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
-
-        ByteArrayInputStream option = new ByteArrayInputStream("1".getBytes());
-        System.setIn(option);
         
         books = new Book[]{new Book(1, "Kent Beck", "Test Driven Development: By Example", 2002),
                            new Book(2, "Martin Fowler", "Refactoring: Improving the Design of Existing Code", 1999)};
@@ -34,7 +31,7 @@ public class UserInterfaceTest {
 
     @After
     public void tearDown() throws Exception {
-        System.setOut(null);
+        System.setOut(System.out);
         System.setIn(System.in);
     }
 
@@ -63,7 +60,14 @@ public class UserInterfaceTest {
 
     @Test
     public void optionIsRead() throws Exception {
-        assertEquals(1, userInterface.readOption());
+        System.setIn(new ByteArrayInputStream("1".getBytes()));
+        assertEquals(1, new UserInterface().readOption());
+    }
+
+    @Test
+    public void invalidOptionShouldReturnNegativeOne() throws Exception {
+        System.setIn(new ByteArrayInputStream("asd".getBytes()));
+        assertEquals(-1, new UserInterface().readOption());
     }
 
     @Test
@@ -83,8 +87,27 @@ public class UserInterfaceTest {
     }
 
     @Test
-    public void optionZeroShouldQuitProgram() throws Exception {
+    public void optionZeroShouldGoodbyeUser() throws Exception {
         userInterface.handleOption(0, books);
         assertEquals("See you soon!\n", outContent.toString());
+    }
+
+    @Test
+    public void optionTwoShouldCheckoutBook() throws Exception {
+        System.setIn(new ByteArrayInputStream("1".getBytes()));
+        new UserInterface().handleOption(2, books);
+        assertTrue(books[0].getStatus() == Book.Status.BORROWED);
+    }
+
+    @Test
+    public void borrowedBookShouldNotBeListed() throws Exception {
+        System.setIn(new ByteArrayInputStream("1".getBytes()));
+        new UserInterface().handleOption(2, books);
+
+        userInterface.listBooks(books);
+        String printed = String.format("%-5s %-5s %-20s %s\n",  "ID", "Year", "Author", "Title") +
+                String.format("%-5s %-5s %-20s %s\n",  "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
+
+        assertEquals(printed, outContent.toString());
     }
 }

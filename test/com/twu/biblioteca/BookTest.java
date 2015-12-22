@@ -38,4 +38,10 @@ public class BookTest {
     public void bookIsInitializedWithAvailableStatus() throws Exception {
         assertEquals(Book.Status.AVAILABLE, book.getStatus());
     }
+
+    @Test
+    public void bookCanBeBorrowed() throws Exception {
+        book.setStatus(Book.Status.BORROWED);
+        assertEquals(Book.Status.BORROWED, book.getStatus());
+    }
 }
