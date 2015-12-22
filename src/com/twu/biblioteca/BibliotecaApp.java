@@ -6,8 +6,15 @@ public class BibliotecaApp {
         Book[] books = {new Book("Kent Beck", "Test Driven Development: By Example", 2002),
                         new Book("Martin Fowler", "Refactoring: Improving the Design of Existing Code", 1999)};
 
-        UserInterface.welcome();
-        UserInterface.listBooks(books);
-        UserInterface.listBooksWithDetails(books);
+        UserInterface userInterface = new UserInterface();
+        userInterface.welcome();
+        int option = 1;
+
+        do {
+            userInterface.menu();
+            option = userInterface.readOption();
+            userInterface.handleOption(option, books);
+        } while (option != 0);
+
     }
 }
