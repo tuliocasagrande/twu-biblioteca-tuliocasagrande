@@ -20,6 +20,7 @@ public class UserInterface {
         System.out.println("Main menu:");
         System.out.println("<1> List Books");
         System.out.println("<2> Checkout Book");
+        System.out.println("<3> Return Book");
         System.out.println("<0> Quit");
         System.out.print("Choose an option: ");
     }
@@ -59,7 +60,11 @@ public class UserInterface {
                 }
                 break;
             case 3:
-                returnBook(books);
+                if (returnBook(books)) {
+                    System.out.println("Thank you for returning the book.");
+                } else {
+                    System.out.println("That is not a valid book to return.");
+                }
                 break;
             case 0:
                 System.out.println("See you soon!");

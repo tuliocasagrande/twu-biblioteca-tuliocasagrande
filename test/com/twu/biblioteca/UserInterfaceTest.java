@@ -132,4 +132,19 @@ public class UserInterfaceTest {
         new UserInterface().handleOption(2, books);
         assertEquals("That book is not available.\n", outContent.toString());
     }
+
+    @Test
+    public void aSuccessfulReturnShouldNotifyUser() throws Exception {
+        books[1].setStatus(Book.Status.BORROWED);
+        System.setIn(new ByteArrayInputStream("2".getBytes()));
+        new UserInterface().handleOption(3, books);
+        assertEquals("Thank you for returning the book.\n", outContent.toString());
+    }
+
+    @Test
+    public void anUnsuccessfulReturnShouldNotifyUser() throws Exception {
+        System.setIn(new ByteArrayInputStream("0".getBytes()));
+        new UserInterface().handleOption(3, books);
+        assertEquals("That is not a valid book to return.\n", outContent.toString());
+    }
 }
