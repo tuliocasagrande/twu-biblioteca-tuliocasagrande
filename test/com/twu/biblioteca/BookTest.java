@@ -11,7 +11,7 @@ public class BookTest {
 
     @Before
     public void setUp() throws Exception {
-        book = new Book("Kent Beck", "Test Driven Development: By Example", 2002);
+        book = new Book(1, "Kent Beck", "Test Driven Development: By Example", 2002);
     }
 
     @Test
@@ -27,6 +27,11 @@ public class BookTest {
     @Test
     public void bookHasYearPublished() throws Exception {
         assertEquals(2002, book.getYearPublished());
+    }
+
+    @Test
+    public void bookHasId() throws Exception {
+        assertEquals(1, book.getId());
     }
 
     @Test

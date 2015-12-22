@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 public class Book {
+    private int id;
     private String author;
     private String title;
     private int yearPublished;
@@ -8,11 +9,16 @@ public class Book {
 
     public enum Status {AVAILABLE, BORROWED}
 
-    public Book(String author, String title, int yearPublished) {
+    public Book(int id, String author, String title, int yearPublished) {
+        this.id = id;
         this.author = author;
         this.title = title;
         this.yearPublished = yearPublished;
         this.status = Status.AVAILABLE;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getAuthor() {

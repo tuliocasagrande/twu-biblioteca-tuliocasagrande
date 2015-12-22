@@ -24,18 +24,12 @@ public class UserInterface {
     }
 
     public void listBooks(Book[] books) {
-        for (Book b: books) {
-            System.out.println(b.getTitle() + " - by " + b.getAuthor());
-        }
-    }
-
-    public void listBooksWithDetails(Book[] books) {
-        int i = 1;
-        System.out.printf("%-5s %-5s %-20s %s\n", "#", "Year", "Author", "Title");
+        System.out.printf("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title");
 
         for (Book b: books) {
-            System.out.printf("%-5s %-5s %-20s %s\n", i, b.getYearPublished(), b.getAuthor(), b.getTitle());
-            i++;
+            if (b.getStatus() == Book.Status.AVAILABLE) {
+                System.out.printf("%-5s %-5s %-20s %s\n", b.getId(), b.getYearPublished(), b.getAuthor(), b.getTitle());
+            }
         }
     }
 
@@ -54,9 +48,10 @@ public class UserInterface {
     public void handleOption(int option, Book[] books) {
         switch (option) {
             case 1:
-                listBooksWithDetails(books);
+                listBooks(books);
                 break;
             case 0:
+                System.out.println("See you soon!");
                 break;
             case -1:
             default:

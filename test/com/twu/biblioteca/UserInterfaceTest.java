@@ -26,8 +26,8 @@ public class UserInterfaceTest {
         ByteArrayInputStream option = new ByteArrayInputStream("1".getBytes());
         System.setIn(option);
         
-        books = new Book[]{new Book("Kent Beck", "Test Driven Development: By Example", 2002),
-                           new Book("Martin Fowler", "Refactoring: Improving the Design of Existing Code", 1999)};
+        books = new Book[]{new Book(1, "Kent Beck", "Test Driven Development: By Example", 2002),
+                           new Book(2, "Martin Fowler", "Refactoring: Improving the Design of Existing Code", 1999)};
 
         userInterface = new UserInterface();
     }
@@ -45,17 +45,9 @@ public class UserInterfaceTest {
     }
 
     @Test
-    public void booksAreListed() throws Exception {
-        userInterface.listBooks(books);
-        String printed = "Test Driven Development: By Example - by Kent Beck\n" +
-                         "Refactoring: Improving the Design of Existing Code - by Martin Fowler\n";
-        assertEquals(printed, outContent.toString());
-    }
-
-    @Test
     public void booksAreListedWithDetails() throws Exception {
-        userInterface.listBooksWithDetails(books);
-        String printed = String.format("%-5s %-5s %-20s %s\n",  "#", "Year", "Author", "Title") +
+        userInterface.listBooks(books);
+        String printed = String.format("%-5s %-5s %-20s %s\n",  "ID", "Year", "Author", "Title") +
                 String.format("%-5s %-5s %-20s %s\n",  "1", "2002", "Kent Beck", "Test Driven Development: By Example") +
                 String.format("%-5s %-5s %-20s %s\n",  "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
 
@@ -77,8 +69,7 @@ public class UserInterfaceTest {
     @Test
     public void optionOneShouldListBooks() throws Exception {
         userInterface.handleOption(1, books);
-
-        String printed = String.format("%-5s %-5s %-20s %s\n",  "#", "Year", "Author", "Title") +
+        String printed = String.format("%-5s %-5s %-20s %s\n",  "ID", "Year", "Author", "Title") +
                 String.format("%-5s %-5s %-20s %s\n",  "1", "2002", "Kent Beck", "Test Driven Development: By Example") +
                 String.format("%-5s %-5s %-20s %s\n",  "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
 
