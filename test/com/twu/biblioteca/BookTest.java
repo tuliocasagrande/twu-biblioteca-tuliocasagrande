@@ -28,4 +28,9 @@ public class BookTest {
     public void bookHasYearPublished() throws Exception {
         assertEquals(2002, book.getYearPublished());
     }
+
+    @Test
+    public void bookIsInitializedWithAvailableStatus() throws Exception {
+        assertEquals(Book.Status.AVAILABLE, book.getStatus());
+    }
 }
