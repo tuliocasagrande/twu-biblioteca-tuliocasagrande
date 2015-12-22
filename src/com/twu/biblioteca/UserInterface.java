@@ -52,7 +52,11 @@ public class UserInterface {
                 listBooks(books);
                 break;
             case 2:
-                checkoutBook(books);
+                if (checkoutBook(books)) {
+                    System.out.println("Thank you! Enjoy the book.");
+                } else {
+                    System.out.println("That book is not available.");
+                }
                 break;
             case 0:
                 System.out.println("See you soon!");
@@ -63,7 +67,7 @@ public class UserInterface {
         }
     }
 
-    private boolean checkoutBook(Book[] books) {
+    public boolean checkoutBook(Book[] books) {
         int book_id;
         try {
             book_id = Integer.parseInt(input.readLine());

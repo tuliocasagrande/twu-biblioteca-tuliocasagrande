@@ -102,12 +102,26 @@ public class UserInterfaceTest {
     @Test
     public void borrowedBookShouldNotBeListed() throws Exception {
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface().handleOption(2, books);
+        new UserInterface().checkoutBook(books);
 
         userInterface.listBooks(books);
         String printed = String.format("%-5s %-5s %-20s %s\n",  "ID", "Year", "Author", "Title") +
                 String.format("%-5s %-5s %-20s %s\n",  "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
 
         assertEquals(printed, outContent.toString());
+    }
+
+    @Test
+    public void aSuccessfulCheckoutShouldNotifyUser() throws Exception {
+        System.setIn(new ByteArrayInputStream("1".getBytes()));
+        new UserInterface().handleOption(2, books);
+        assertEquals("Thank you! Enjoy the book.\n", outContent.toString());
+    }
+
+    @Test
+    public void anUnsuccessfulCheckoutShouldNotifyUser() throws Exception {
+        System.setIn(new ByteArrayInputStream("0".getBytes()));
+        new UserInterface().handleOption(2, books);
+        assertEquals("That book is not available.\n", outContent.toString());
     }
 }
