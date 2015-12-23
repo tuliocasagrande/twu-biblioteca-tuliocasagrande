@@ -22,9 +22,9 @@ public class UserInterfaceTest {
     public void setUp() throws Exception {
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
-        
+
         books = new Book[]{new Book(1, "Kent Beck", "Test Driven Development: By Example", 2002),
-                           new Book(2, "Martin Fowler", "Refactoring: Improving the Design of Existing Code", 1999)};
+                new Book(2, "Martin Fowler", "Refactoring: Improving the Design of Existing Code", 1999)};
 
         userInterface = new UserInterface();
     }
@@ -37,29 +37,29 @@ public class UserInterfaceTest {
 
     @Test
     public void welcomeMessageIsPrinted() throws Exception {
-        userInterface.welcome();
-        assertEquals("Welcome!!! :D\n", outContent.toString());
+        userInterface.printWelcome();
+        assertEquals("Welcome to the Bangalore Public Library!\n\n", outContent.toString());
     }
 
     @Test
-    public void booksAreListedWithDetails() throws Exception {
+    public void booksAreListed() throws Exception {
         userInterface.listBooks(books);
-        String printed = String.format("%-5s %-5s %-20s %s\n",  "ID", "Year", "Author", "Title") +
-                String.format("%-5s %-5s %-20s %s\n",  "1", "2002", "Kent Beck", "Test Driven Development: By Example") +
-                String.format("%-5s %-5s %-20s %s\n",  "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
+        String printed = String.format("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title") +
+                String.format("%-5s %-5s %-20s %s\n", "1", "2002", "Kent Beck", "Test Driven Development: By Example") +
+                String.format("%-5s %-5s %-20s %s\n", "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
 
         assertEquals(printed, outContent.toString());
     }
 
     @Test
     public void menuIsPrinted() throws Exception {
-        userInterface.menu();
+        userInterface.printMenu();
         assertTrue(outContent.toString().length() > 0);
         assertTrue(outContent.toString().contains("Choose an option"));
     }
 
     @Test
-    public void optionIsRead() throws Exception {
+    public void validOptionShouldReturnAnInteger() throws Exception {
         System.setIn(new ByteArrayInputStream("1".getBytes()));
         assertEquals(1, new UserInterface().readOption());
     }
@@ -73,9 +73,9 @@ public class UserInterfaceTest {
     @Test
     public void optionOneShouldListBooks() throws Exception {
         userInterface.handleOption(1, books);
-        String printed = String.format("%-5s %-5s %-20s %s\n",  "ID", "Year", "Author", "Title") +
-                String.format("%-5s %-5s %-20s %s\n",  "1", "2002", "Kent Beck", "Test Driven Development: By Example") +
-                String.format("%-5s %-5s %-20s %s\n",  "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
+        String printed = String.format("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title") +
+                String.format("%-5s %-5s %-20s %s\n", "1", "2002", "Kent Beck", "Test Driven Development: By Example") +
+                String.format("%-5s %-5s %-20s %s\n", "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
 
         assertEquals(printed, outContent.toString());
     }
@@ -87,7 +87,7 @@ public class UserInterfaceTest {
     }
 
     @Test
-    public void optionZeroShouldGoodbyeUser() throws Exception {
+    public void optionZeroShouldSayGoodbye() throws Exception {
         userInterface.handleOption(0, books);
         assertEquals("See you soon!\n", outContent.toString());
     }
@@ -113,8 +113,8 @@ public class UserInterfaceTest {
         new UserInterface().checkoutBook(books);
 
         userInterface.listBooks(books);
-        String printed = String.format("%-5s %-5s %-20s %s\n",  "ID", "Year", "Author", "Title") +
-                String.format("%-5s %-5s %-20s %s\n",  "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
+        String printed = String.format("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title") +
+                String.format("%-5s %-5s %-20s %s\n", "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
 
         assertEquals(printed, outContent.toString());
     }

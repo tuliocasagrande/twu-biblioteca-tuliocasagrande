@@ -44,4 +44,12 @@ public class BookTest {
         book.setStatus(Book.Status.BORROWED);
         assertEquals(Book.Status.BORROWED, book.getStatus());
     }
+
+    @Test
+    public void bookCanBeReturned() throws Exception {
+        book.setStatus(Book.Status.BORROWED);
+        assertEquals(Book.Status.BORROWED, book.getStatus());
+        book.setStatus(Book.Status.AVAILABLE);
+        assertEquals(Book.Status.AVAILABLE, book.getStatus());
+    }
 }

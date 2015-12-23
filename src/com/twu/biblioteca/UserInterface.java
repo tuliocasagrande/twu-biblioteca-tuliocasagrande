@@ -4,19 +4,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class UserInterface {
+class UserInterface {
 
-    private BufferedReader input;
+    private final BufferedReader input;
 
     public UserInterface() {
         input = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    public void welcome() {
-        System.out.println("Welcome!!! :D");
+    public void printWelcome() {
+        System.out.println("Welcome to the Bangalore Public Library!\n");
     }
 
-    public void menu() {
+    public void printMenu() {
         System.out.println("Main menu:");
         System.out.println("<1> List Books");
         System.out.println("<2> Checkout Book");
@@ -28,7 +28,7 @@ public class UserInterface {
     public void listBooks(Book[] books) {
         System.out.printf("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title");
 
-        for (Book b: books) {
+        for (Book b : books) {
             if (b.getStatus() == Book.Status.AVAILABLE) {
                 System.out.printf("%-5s %-5s %-20s %s\n", b.getId(), b.getYearPublished(), b.getAuthor(), b.getTitle());
             }
@@ -75,6 +75,17 @@ public class UserInterface {
         }
     }
 
+    // LINEAR SEARCH!!!
+    // If books[] is getting big, consider change it to a Hash
+    private Book searchBook(Book[] books, int book_id) {
+        for (Book b : books) {
+            if (b.getId() == book_id) {
+                return b;
+            }
+        }
+        return null;
+    }
+
     public boolean checkoutBook(Book[] books) {
         int book_id;
         try {
@@ -85,17 +96,10 @@ public class UserInterface {
             return false;
         }
 
-        // LINEAR SEARCH!!!
-        // If the books array is getting big, consider change it to a Hash
-        for (Book b: books) {
-            if (b.getId() == book_id) {
-                if (b.getStatus() == Book.Status.AVAILABLE) {
-                    b.setStatus(Book.Status.BORROWED);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
+        Book book = searchBook(books, book_id);
+        if (book != null && book.getStatus() == Book.Status.AVAILABLE) {
+            book.setStatus(Book.Status.BORROWED);
+            return true;
         }
         return false;
     }
@@ -110,17 +114,10 @@ public class UserInterface {
             return false;
         }
 
-        // LINEAR SEARCH!!!
-        // If the books array is getting big, consider change it to a Hash
-        for (Book b: books) {
-            if (b.getId() == book_id) {
-                if (b.getStatus() == Book.Status.BORROWED) {
-                    b.setStatus(Book.Status.AVAILABLE);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
+        Book book = searchBook(books, book_id);
+        if (book != null && book.getStatus() == Book.Status.BORROWED) {
+            book.setStatus(Book.Status.AVAILABLE);
+            return true;
         }
         return false;
     }

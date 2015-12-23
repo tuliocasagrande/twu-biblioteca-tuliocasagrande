@@ -1,13 +1,11 @@
 package com.twu.biblioteca;
 
 public class Book {
-    private int id;
-    private String author;
-    private String title;
-    private int yearPublished;
+    private final int id;
+    private final String author;
+    private final String title;
+    private final int yearPublished;
     private Status status;
-
-    public enum Status {AVAILABLE, BORROWED}
 
     public Book(int id, String author, String title, int yearPublished) {
         this.id = id;
@@ -40,4 +38,6 @@ public class Book {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    public enum Status {AVAILABLE, BORROWED}
 }
