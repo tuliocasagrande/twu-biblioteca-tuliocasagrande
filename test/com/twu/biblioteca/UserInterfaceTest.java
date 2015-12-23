@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 public class UserInterfaceTest {
 
     private ByteArrayOutputStream outContent;
-    private Book[] books;
+    private Library library;
     private UserInterface userInterface;
 
     @Before
@@ -23,9 +23,10 @@ public class UserInterfaceTest {
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
-        books = new Book[]{new Book(1, "Kent Beck", "Test Driven Development: By Example", 2002),
+        Book[] books = new Book[]{new Book(1, "Kent Beck", "Test Driven Development: By Example", 2002),
                 new Book(2, "Martin Fowler", "Refactoring: Improving the Design of Existing Code", 1999)};
 
+        library = new Library(books);
         userInterface = new UserInterface();
     }
 
@@ -38,12 +39,12 @@ public class UserInterfaceTest {
     @Test
     public void welcomeMessageIsPrinted() throws Exception {
         userInterface.printWelcome();
-        assertEquals("Welcome to the Bangalore Public Library!\n\n", outContent.toString());
+        assertTrue(outContent.toString().contains("Welcome"));
     }
 
     @Test
     public void booksAreListed() throws Exception {
-        userInterface.listBooks(books);
+        userInterface.listBooks(library);
         String printed = String.format("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title") +
                 String.format("%-5s %-5s %-20s %s\n", "1", "2002", "Kent Beck", "Test Driven Development: By Example") +
                 String.format("%-5s %-5s %-20s %s\n", "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
@@ -54,65 +55,58 @@ public class UserInterfaceTest {
     @Test
     public void menuIsPrinted() throws Exception {
         userInterface.printMenu();
-        assertTrue(outContent.toString().length() > 0);
-        assertTrue(outContent.toString().contains("Choose an option"));
+        assertTrue(outContent.toString().contains("Main menu"));
     }
 
     @Test
-    public void validOptionShouldReturnAnInteger() throws Exception {
+    public void validReadShouldReturnAnInteger() throws Exception {
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        assertEquals(1, new UserInterface().readOption());
+        assertEquals(1, new UserInterface().readInteger());
     }
 
     @Test
-    public void invalidOptionShouldReturnNegativeOne() throws Exception {
+    public void invalidReadShouldReturnNegativeOne() throws Exception {
         System.setIn(new ByteArrayInputStream("asd".getBytes()));
-        assertEquals(-1, new UserInterface().readOption());
-    }
-
-    @Test
-    public void optionOneShouldListBooks() throws Exception {
-        userInterface.handleOption(1, books);
-        String printed = String.format("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title") +
-                String.format("%-5s %-5s %-20s %s\n", "1", "2002", "Kent Beck", "Test Driven Development: By Example") +
-                String.format("%-5s %-5s %-20s %s\n", "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
-
-        assertEquals(printed, outContent.toString());
+        assertEquals(-1, new UserInterface().readInteger());
     }
 
     @Test
     public void invalidOptionShouldNotifyUser() throws Exception {
-        userInterface.handleOption(-1, books);
-        assertEquals("Select a valid option!\n", outContent.toString());
+        userInterface.handleMenuOption(-1, library);
+        assertEquals("\nSelect a valid option!\n", outContent.toString());
     }
 
     @Test
     public void optionZeroShouldSayGoodbye() throws Exception {
-        userInterface.handleOption(0, books);
-        assertEquals("See you soon!\n", outContent.toString());
+        userInterface.handleMenuOption(0, library);
+        assertEquals("\nSee you soon!\n", outContent.toString());
+    }
+
+    @Test
+    public void optionOneShouldListBooks() throws Exception {
+        userInterface.handleMenuOption(1, library);
+        assertTrue(outContent.toString().contains("These are the available books"));
     }
 
     @Test
     public void optionTwoShouldCheckoutBook() throws Exception {
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface().handleOption(2, books);
-        assertTrue(books[0].getStatus() == Book.Status.BORROWED);
+        new UserInterface().handleMenuOption(2, library);
+        assertTrue(library.getBooks()[0].getStatus() == Book.Status.BORROWED);
     }
 
     @Test
     public void optionThreeShouldReturnBook() throws Exception {
-        books[1].setStatus(Book.Status.BORROWED);
-        System.setIn(new ByteArrayInputStream("2".getBytes()));
-        new UserInterface().handleOption(3, books);
-        assertTrue(books[1].getStatus() == Book.Status.AVAILABLE);
+        library.checkoutBook(1);
+        System.setIn(new ByteArrayInputStream("1".getBytes()));
+        new UserInterface().handleMenuOption(3, library);
+        assertTrue(library.getBooks()[0].getStatus() == Book.Status.AVAILABLE);
     }
 
     @Test
     public void borrowedBookShouldNotBeListed() throws Exception {
-        System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface().checkoutBook(books);
-
-        userInterface.listBooks(books);
+        library.checkoutBook(1);
+        userInterface.listBooks(library);
         String printed = String.format("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title") +
                 String.format("%-5s %-5s %-20s %s\n", "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
 
@@ -121,30 +115,26 @@ public class UserInterfaceTest {
 
     @Test
     public void aSuccessfulCheckoutShouldNotifyUser() throws Exception {
-        System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface().handleOption(2, books);
+        userInterface.checkoutBook(library, 1);
         assertEquals("Thank you! Enjoy the book.\n", outContent.toString());
     }
 
     @Test
     public void anUnsuccessfulCheckoutShouldNotifyUser() throws Exception {
-        System.setIn(new ByteArrayInputStream("0".getBytes()));
-        new UserInterface().handleOption(2, books);
+        userInterface.checkoutBook(library, 100);
         assertEquals("That book is not available.\n", outContent.toString());
     }
 
     @Test
     public void aSuccessfulReturnShouldNotifyUser() throws Exception {
-        books[1].setStatus(Book.Status.BORROWED);
-        System.setIn(new ByteArrayInputStream("2".getBytes()));
-        new UserInterface().handleOption(3, books);
+        library.checkoutBook(2);
+        userInterface.returnBook(library, 2);
         assertEquals("Thank you for returning the book.\n", outContent.toString());
     }
 
     @Test
     public void anUnsuccessfulReturnShouldNotifyUser() throws Exception {
-        System.setIn(new ByteArrayInputStream("0".getBytes()));
-        new UserInterface().handleOption(3, books);
+        userInterface.returnBook(library, 200);
         assertEquals("That is not a valid book to return.\n", outContent.toString());
     }
 }
