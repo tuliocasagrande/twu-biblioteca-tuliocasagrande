@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 public class LibraryTest {
 
-    Library library;
+    private Library library;
 
     @Before
     public void setUp() throws Exception {

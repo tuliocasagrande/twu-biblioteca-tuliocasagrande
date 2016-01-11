@@ -41,14 +41,14 @@ public class BookTest {
 
     @Test
     public void bookCanBeBorrowed() throws Exception {
-        book.checkoutBook();
+        book.checkOut();
         assertEquals(Book.Status.BORROWED, book.getStatus());
     }
 
     @Test
     public void bookCanBeReturned() throws Exception {
-        book.checkoutBook();
-        book.returnBook();
+        book.checkOut();
+        book.checkIn();
         assertEquals(Book.Status.AVAILABLE, book.getStatus());
     }
 }

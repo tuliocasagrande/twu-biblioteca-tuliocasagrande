@@ -46,14 +46,14 @@ public class MovieTest {
 
     @Test
     public void movieCanBeBorrowed() throws Exception {
-        movie.checkoutMovie();
+        movie.checkOut();
         assertEquals(Movie.Status.BORROWED, movie.getStatus());
     }
 
     @Test
     public void movieCanBeReturned() throws Exception {
-        movie.checkoutMovie();
-        movie.returnMovie();
+        movie.checkOut();
+        movie.checkIn();
         assertEquals(Movie.Status.AVAILABLE, movie.getStatus());
     }
 }

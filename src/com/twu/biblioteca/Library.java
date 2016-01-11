@@ -1,9 +1,9 @@
 package com.twu.biblioteca;
 
-public class Library {
+class Library {
 
-    private Book[] books;
-    private Movie[] movies;
+    private final Book[] books;
+    private final Movie[] movies;
 
     public Library(Book[] books, Movie[] movies) {
         this.books = books;
@@ -30,7 +30,7 @@ public class Library {
     public boolean checkoutBook(int book_id) {
         Book book = searchBook(book_id);
         if (book != null && book.getStatus() == Book.Status.AVAILABLE) {
-            book.checkoutBook();
+            book.checkOut();
             return true;
         }
         return false;
@@ -39,7 +39,7 @@ public class Library {
     public boolean returnBook(int book_id) {
         Book book = searchBook(book_id);
         if (book != null && book.getStatus() == Book.Status.BORROWED) {
-            book.returnBook();
+            book.checkIn();
             return true;
         }
         return false;
@@ -57,7 +57,7 @@ public class Library {
     public boolean checkoutMovie(int movie_id) {
         Movie movie = searchMovie(movie_id);
         if (movie != null && movie.getStatus() == Movie.Status.AVAILABLE) {
-            movie.checkoutMovie();
+            movie.checkOut();
             return true;
         }
         return false;
@@ -66,7 +66,7 @@ public class Library {
     public boolean returnMovie(int movie_id) {
         Movie movie = searchMovie(movie_id);
         if (movie != null && movie.getStatus() == Movie.Status.BORROWED) {
-            movie.returnMovie();
+            movie.checkIn();
             return true;
         }
         return false;
