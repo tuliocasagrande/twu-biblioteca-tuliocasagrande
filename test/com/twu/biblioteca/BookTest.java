@@ -26,7 +26,7 @@ public class BookTest {
 
     @Test
     public void bookHasYearPublished() throws Exception {
-        assertEquals(2002, book.getYearPublished());
+        assertEquals(2002, book.getYear());
     }
 
     @Test

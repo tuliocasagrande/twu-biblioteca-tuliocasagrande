@@ -30,7 +30,7 @@ class UserInterface {
 
         for (Book b : library.getBooks()) {
             if (b.getStatus() == Book.Status.AVAILABLE) {
-                System.out.printf("%-5s %-5s %-20s %s\n", b.getId(), b.getYearPublished(), b.getAuthor(), b.getTitle());
+                System.out.printf("%-5s %-5s %-20s %s\n", b.getId(), b.getYear(), b.getAuthor(), b.getTitle());
             }
         }
     }
