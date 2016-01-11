@@ -29,26 +29,4 @@ public class BookTest {
         assertEquals(2002, book.getYear());
     }
 
-    @Test
-    public void bookHasId() throws Exception {
-        assertEquals(1, book.getId());
-    }
-
-    @Test
-    public void bookIsInitializedWithAvailableStatus() throws Exception {
-        assertEquals(Book.Status.AVAILABLE, book.getStatus());
-    }
-
-    @Test
-    public void bookCanBeBorrowed() throws Exception {
-        book.checkOut();
-        assertEquals(Book.Status.BORROWED, book.getStatus());
-    }
-
-    @Test
-    public void bookCanBeReturned() throws Exception {
-        book.checkOut();
-        book.checkIn();
-        assertEquals(Book.Status.AVAILABLE, book.getStatus());
-    }
 }

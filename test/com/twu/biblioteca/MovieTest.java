@@ -20,7 +20,7 @@ public class MovieTest {
     }
 
     @Test
-    public void movieHasAuthor() throws Exception {
+    public void movieHasDirector() throws Exception {
         assertEquals("Morten Tyldum", movie.getDirector());
     }
 
@@ -34,26 +34,4 @@ public class MovieTest {
         assertEquals(8, movie.getRating());
     }
 
-    @Test
-    public void movieHasId() throws Exception {
-        assertEquals(1, movie.getId());
-    }
-
-    @Test
-    public void movieIsInitializedWithAvailableStatus() throws Exception {
-        assertEquals(Movie.Status.AVAILABLE, movie.getStatus());
-    }
-
-    @Test
-    public void movieCanBeBorrowed() throws Exception {
-        movie.checkOut();
-        assertEquals(Movie.Status.BORROWED, movie.getStatus());
-    }
-
-    @Test
-    public void movieCanBeReturned() throws Exception {
-        movie.checkOut();
-        movie.checkIn();
-        assertEquals(Movie.Status.AVAILABLE, movie.getStatus());
-    }
 }
