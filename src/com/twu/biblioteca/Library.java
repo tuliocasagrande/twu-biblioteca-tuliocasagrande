@@ -3,13 +3,19 @@ package com.twu.biblioteca;
 public class Library {
 
     private Book[] books;
+    private Movie[] movies;
 
-    public Library(Book[] books) {
+    public Library(Book[] books, Movie[] movies) {
         this.books = books;
+        this.movies = movies;
     }
 
     public Book[] getBooks() {
         return books;
+    }
+
+    public Movie[] getMovies() {
+        return movies;
     }
 
     // LINEAR SEARCH!!!

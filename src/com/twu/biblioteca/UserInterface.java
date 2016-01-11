@@ -21,6 +21,7 @@ class UserInterface {
         System.out.println("<1> List Books");
         System.out.println("<2> Checkout Book");
         System.out.println("<3> Return Book");
+        System.out.println("<4> List Movies");
         System.out.println("<0> Quit");
         System.out.print("Choose an option: ");
     }
@@ -60,6 +61,10 @@ class UserInterface {
                 book_id = readInteger();
                 returnBook(library, book_id);
                 break;
+            case 4:
+                System.out.println("\nThese are the available movies:");
+                listMovies(library);
+                break;
             case 0:
                 System.out.println("\nSee you soon!");
                 break;
@@ -81,6 +86,15 @@ class UserInterface {
             System.out.println("Thank you! Enjoy the book.");
         } else {
             System.out.println("That book is not available.");
+        }
+    }
+
+    public void listMovies(Library library) {
+        System.out.printf("%-5s %-5s %-20s %s\n", "ID", "Year", "Rating", "Director", "Title");
+
+        for (Movie m : library.getMovies()) {
+            System.out.printf("%-5s %-5s %-20s %s\n", m.getId(), m.getYear(),
+                    m.getRating(), m.getDirector(), m.getTitle());
         }
     }
 }

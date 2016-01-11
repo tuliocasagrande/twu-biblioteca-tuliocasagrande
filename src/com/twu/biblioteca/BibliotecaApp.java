@@ -8,7 +8,10 @@ public class BibliotecaApp {
                 new Book(3, "Kathy Sierra", "Head First Java", 2005),
                 new Book(4, "Robert C. Martin", "Clean Code: A Handbook of Agile Software Craftsmanship", 2008)};
 
-        Library library = new Library(books);
+        Movie[] movies = {new Movie(1, "The Imitation Game", "Morten Tyldum", 2014, 8),
+                new Movie(2, "The Wolf of Wall Street", "Martin Scorsese", 2013, 8)};
+
+        Library library = new Library(books, movies);
         UserInterface userInterface = new UserInterface();
         userInterface.printWelcome();
         int option;

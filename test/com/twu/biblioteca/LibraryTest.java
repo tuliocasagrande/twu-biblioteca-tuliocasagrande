@@ -12,9 +12,12 @@ public class LibraryTest {
 
     @Before
     public void setUp() throws Exception {
-        Book[] books = new Book[]{new Book(1, "Kent Beck", "Test Driven Development: By Example", 2002),
+        Book[] books = {new Book(1, "Kent Beck", "Test Driven Development: By Example", 2002),
                 new Book(2, "Martin Fowler", "Refactoring: Improving the Design of Existing Code", 1999)};
-        library = new Library(books);
+        Movie[] movies = {new Movie(1, "The Imitation Game", "Morten Tyldum", 2014, 8),
+                new Movie(2, "The Wolf of Wall Street", "Martin Scorsese", 2013, 8)};
+
+        library = new Library(books, movies);
         library.checkoutBook(2);
     }
 

@@ -23,10 +23,13 @@ public class UserInterfaceTest {
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
-        Book[] books = new Book[]{new Book(1, "Kent Beck", "Test Driven Development: By Example", 2002),
+        Book[] books = {new Book(1, "Kent Beck", "Test Driven Development: By Example", 2002),
                 new Book(2, "Martin Fowler", "Refactoring: Improving the Design of Existing Code", 1999)};
 
-        library = new Library(books);
+        Movie[] movies = {new Movie(1, "The Imitation Game", "Morten Tyldum", 2014, 8),
+                new Movie(2, "The Wolf of Wall Street", "Martin Scorsese", 2013, 8)};
+
+        library = new Library(books, movies);
         userInterface = new UserInterface();
     }
 
@@ -136,5 +139,21 @@ public class UserInterfaceTest {
     public void anUnsuccessfulReturnShouldNotifyUser() throws Exception {
         userInterface.returnBook(library, 200);
         assertEquals("That is not a valid book to return.\n", outContent.toString());
+    }
+
+    @Test
+    public void moviesAreListed() throws Exception {
+        userInterface.listMovies(library);
+        String printed = String.format("%-5s %-5s %-20s %s\n", "ID", "Year", "Rating", "Director", "Title") +
+                String.format("%-5s %-5s %-20s %s\n", "1", "2014", "8", "Morten Tyldum", "The Imitation Game") +
+                String.format("%-5s %-5s %-20s %s\n", "2", "2013", "8", "Martin Scorsese", "The Wolf of Wall Street");
+
+        assertEquals(printed, outContent.toString());
+    }
+
+    @Test
+    public void optionFourShouldListMovies() throws Exception {
+        userInterface.handleMenuOption(4, library);
+        assertTrue(outContent.toString().contains("These are the available movies"));
     }
 }

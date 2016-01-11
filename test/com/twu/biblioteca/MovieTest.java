@@ -11,7 +11,7 @@ public class MovieTest {
 
     @Before
     public void setUp() throws Exception {
-        movie = new Movie("The Imitation Game", "Morten Tyldum", 2014, 8);
+        movie = new Movie(1, "The Imitation Game", "Morten Tyldum", 2014, 8);
 
     }
 
@@ -33,5 +33,10 @@ public class MovieTest {
     @Test
     public void movieHasRating() throws Exception {
         assertEquals(8, movie.getRating());
+    }
+
+    @Test
+    public void movieHasId() throws Exception {
+        assertEquals(1, movie.getId());
     }
 }
