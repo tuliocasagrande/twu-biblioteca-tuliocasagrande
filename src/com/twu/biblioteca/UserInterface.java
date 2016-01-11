@@ -21,19 +21,14 @@ class UserInterface {
         System.out.println("<1> List Books");
         System.out.println("<2> Checkout Book");
         System.out.println("<3> Return Book");
+        System.out.println();
         System.out.println("<4> List Movies");
+        System.out.println("<5> Checkout Book");
+        System.out.println("<6> Return Book");
+        System.out.println();
         System.out.println("<0> Quit");
+        System.out.println();
         System.out.print("Choose an option: ");
-    }
-
-    public void listBooks(Library library) {
-        System.out.printf("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title");
-
-        for (Book b : library.getBooks()) {
-            if (b.getStatus() == Book.Status.AVAILABLE) {
-                System.out.printf("%-5s %-5s %-20s %s\n", b.getId(), b.getYear(), b.getAuthor(), b.getTitle());
-            }
-        }
     }
 
     public int readInteger() {
@@ -47,29 +42,47 @@ class UserInterface {
     }
 
     public void handleMenuOption(int option, Library library) {
-        int book_id;
+        int id;
         switch (option) {
             case 1:
                 System.out.println("\nThese are the available books:");
                 listBooks(library);
                 break;
             case 2:
-                book_id = readInteger();
-                checkoutBook(library, book_id);
+                id = readInteger();
+                checkoutBook(library, id);
                 break;
             case 3:
-                book_id = readInteger();
-                returnBook(library, book_id);
+                id = readInteger();
+                returnBook(library, id);
                 break;
             case 4:
                 System.out.println("\nThese are the available movies:");
                 listMovies(library);
+                break;
+            case 5:
+                id = readInteger();
+                checkoutMovie(library, id);
+                break;
+            case 6:
+                id = readInteger();
+                returnMovie(library, id);
                 break;
             case 0:
                 System.out.println("\nSee you soon!");
                 break;
             default:
                 System.out.println("\nSelect a valid option!");
+        }
+    }
+
+    public void listBooks(Library library) {
+        System.out.printf("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title");
+
+        for (Book b : library.getBooks()) {
+            if (b.getStatus() == Book.Status.AVAILABLE) {
+                System.out.printf("%-5s %-5s %-20s %s\n", b.getId(), b.getYear(), b.getAuthor(), b.getTitle());
+            }
         }
     }
 
@@ -90,11 +103,29 @@ class UserInterface {
     }
 
     public void listMovies(Library library) {
-        System.out.printf("%-5s %-5s %-20s %s\n", "ID", "Year", "Rating", "Director", "Title");
+        System.out.printf("%-5s %-5s %-7s %-20s %s\n", "ID", "Year", "Rating", "Director", "Title");
 
         for (Movie m : library.getMovies()) {
-            System.out.printf("%-5s %-5s %-20s %s\n", m.getId(), m.getYear(),
-                    m.getRating(), m.getDirector(), m.getTitle());
+            if (m.getStatus() == Movie.Status.AVAILABLE) {
+                System.out.printf("%-5s %-5s %-7s %-20s %s\n", m.getId(), m.getYear(),
+                        m.getRating(), m.getDirector(), m.getTitle());
+            }
+        }
+    }
+
+    public void returnMovie(Library library, int movie_id) {
+        if (library.returnMovie(movie_id)) {
+            System.out.println("Thank you for returning the movie.");
+        } else {
+            System.out.println("That is not a valid movie to return.");
+        }
+    }
+
+    public void checkoutMovie(Library library, int movie_id) {
+        if (library.checkoutMovie(movie_id)) {
+            System.out.println("Thank you! Enjoy the movie.");
+        } else {
+            System.out.println("That movie is not available.");
         }
     }
 }

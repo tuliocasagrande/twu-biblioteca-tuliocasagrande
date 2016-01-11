@@ -35,8 +35,12 @@ public class Book {
         return status;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void checkoutBook() {
+        this.status = Status.BORROWED;
+    }
+
+    public void returnBook() {
+        this.status = Status.AVAILABLE;
     }
 
     public enum Status {AVAILABLE, BORROWED}

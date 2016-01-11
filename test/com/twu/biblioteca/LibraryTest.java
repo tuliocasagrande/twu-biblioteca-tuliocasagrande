@@ -19,6 +19,7 @@ public class LibraryTest {
 
         library = new Library(books, movies);
         library.checkoutBook(2);
+        library.checkoutMovie(2);
     }
 
     @Test
@@ -47,5 +48,33 @@ public class LibraryTest {
         assertTrue(library.getBooks()[1].getStatus() == Book.Status.BORROWED);
         assertFalse(library.checkoutBook(2));
         assertTrue(library.getBooks()[1].getStatus() == Book.Status.BORROWED);
+    }
+
+    @Test
+    public void anAvailableMovieCanBeCheckedOut() throws Exception {
+        assertTrue(library.getMovies()[0].getStatus() == Movie.Status.AVAILABLE);
+        assertTrue(library.checkoutMovie(1));
+        assertTrue(library.getMovies()[0].getStatus() == Movie.Status.BORROWED);
+    }
+
+    @Test
+    public void aBorrowedMovieCanBeReturned() throws Exception {
+        assertTrue(library.getMovies()[1].getStatus() == Movie.Status.BORROWED);
+        assertTrue(library.returnMovie(2));
+        assertTrue(library.getMovies()[1].getStatus() == Movie.Status.AVAILABLE);
+    }
+
+    @Test
+    public void anAvailableMovieCannotBeReturned() throws Exception {
+        assertTrue(library.getMovies()[0].getStatus() == Movie.Status.AVAILABLE);
+        assertFalse(library.returnMovie(1));
+        assertTrue(library.getMovies()[0].getStatus() == Movie.Status.AVAILABLE);
+    }
+
+    @Test
+    public void aBorrowedMovieCannotBeCheckedOut() throws Exception {
+        assertTrue(library.getMovies()[1].getStatus() == Movie.Status.BORROWED);
+        assertFalse(library.checkoutMovie(2));
+        assertTrue(library.getMovies()[1].getStatus() == Movie.Status.BORROWED);
     }
 }

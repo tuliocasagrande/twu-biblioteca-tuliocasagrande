@@ -117,26 +117,26 @@ public class UserInterfaceTest {
     }
 
     @Test
-    public void aSuccessfulCheckoutShouldNotifyUser() throws Exception {
+    public void aSuccessfulCheckedOutBookShouldNotifyUser() throws Exception {
         userInterface.checkoutBook(library, 1);
         assertEquals("Thank you! Enjoy the book.\n", outContent.toString());
     }
 
     @Test
-    public void anUnsuccessfulCheckoutShouldNotifyUser() throws Exception {
+    public void anUnsuccessfulCheckOutBookShouldNotifyUser() throws Exception {
         userInterface.checkoutBook(library, 100);
         assertEquals("That book is not available.\n", outContent.toString());
     }
 
     @Test
-    public void aSuccessfulReturnShouldNotifyUser() throws Exception {
+    public void aSuccessfulReturnedBookShouldNotifyUser() throws Exception {
         library.checkoutBook(2);
         userInterface.returnBook(library, 2);
         assertEquals("Thank you for returning the book.\n", outContent.toString());
     }
 
     @Test
-    public void anUnsuccessfulReturnShouldNotifyUser() throws Exception {
+    public void anUnsuccessfulReturnedBookShouldNotifyUser() throws Exception {
         userInterface.returnBook(library, 200);
         assertEquals("That is not a valid book to return.\n", outContent.toString());
     }
@@ -144,9 +144,9 @@ public class UserInterfaceTest {
     @Test
     public void moviesAreListed() throws Exception {
         userInterface.listMovies(library);
-        String printed = String.format("%-5s %-5s %-20s %s\n", "ID", "Year", "Rating", "Director", "Title") +
-                String.format("%-5s %-5s %-20s %s\n", "1", "2014", "8", "Morten Tyldum", "The Imitation Game") +
-                String.format("%-5s %-5s %-20s %s\n", "2", "2013", "8", "Martin Scorsese", "The Wolf of Wall Street");
+        String printed = String.format("%-5s %-5s %-7s %-20s %s\n", "ID", "Year", "Rating", "Director", "Title") +
+                String.format("%-5s %-5s %-7s %-20s %s\n", "1", "2014", "8", "Morten Tyldum", "The Imitation Game") +
+                String.format("%-5s %-5s %-7s %-20s %s\n", "2", "2013", "8", "Martin Scorsese", "The Wolf of Wall Street");
 
         assertEquals(printed, outContent.toString());
     }
@@ -155,5 +155,55 @@ public class UserInterfaceTest {
     public void optionFourShouldListMovies() throws Exception {
         userInterface.handleMenuOption(4, library);
         assertTrue(outContent.toString().contains("These are the available movies"));
+    }
+
+    @Test
+    public void optionFiveShouldCheckoutMovie() throws Exception {
+        System.setIn(new ByteArrayInputStream("1".getBytes()));
+        new UserInterface().handleMenuOption(5, library);
+        assertTrue(library.getMovies()[0].getStatus() == Movie.Status.BORROWED);
+    }
+
+    @Test
+    public void optionSixShouldReturnMovie() throws Exception {
+        library.checkoutMovie(1);
+        System.setIn(new ByteArrayInputStream("1".getBytes()));
+        new UserInterface().handleMenuOption(6, library);
+        assertTrue(library.getMovies()[0].getStatus() == Movie.Status.AVAILABLE);
+    }
+
+    @Test
+    public void borrowedMovieShouldNotBeListed() throws Exception {
+        library.checkoutMovie(1);
+        userInterface.listMovies(library);
+        String printed = String.format("%-5s %-5s %-7s %-20s %s\n", "ID", "Year", "Rating", "Director", "Title") +
+                String.format("%-5s %-5s %-7s %-20s %s\n", "2", "2013", "8", "Martin Scorsese", "The Wolf of Wall Street");
+
+        assertEquals(printed, outContent.toString());
+    }
+
+    @Test
+    public void aSuccessfulCheckedOutMovieShouldNotifyUser() throws Exception {
+        userInterface.checkoutMovie(library, 1);
+        assertEquals("Thank you! Enjoy the movie.\n", outContent.toString());
+    }
+
+    @Test
+    public void anUnsuccessfulCheckedOutMovieShouldNotifyUser() throws Exception {
+        userInterface.checkoutMovie(library, 100);
+        assertEquals("That movie is not available.\n", outContent.toString());
+    }
+
+    @Test
+    public void aSuccessfulReturnedMovieShouldNotifyUser() throws Exception {
+        library.checkoutMovie(2);
+        userInterface.returnMovie(library, 2);
+        assertEquals("Thank you for returning the movie.\n", outContent.toString());
+    }
+
+    @Test
+    public void anUnsuccessfulReturnedMovieShouldNotifyUser() throws Exception {
+        userInterface.returnMovie(library, 200);
+        assertEquals("That is not a valid movie to return.\n", outContent.toString());
     }
 }

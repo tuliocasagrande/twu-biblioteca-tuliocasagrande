@@ -18,8 +18,6 @@ public class Library {
         return movies;
     }
 
-    // LINEAR SEARCH!!!
-    // If books[] is getting big, consider change it to a Hash
     private Book searchBook(int book_id) {
         for (Book b : books) {
             if (b.getId() == book_id) {
@@ -32,7 +30,7 @@ public class Library {
     public boolean checkoutBook(int book_id) {
         Book book = searchBook(book_id);
         if (book != null && book.getStatus() == Book.Status.AVAILABLE) {
-            book.setStatus(Book.Status.BORROWED);
+            book.checkoutBook();
             return true;
         }
         return false;
@@ -41,7 +39,34 @@ public class Library {
     public boolean returnBook(int book_id) {
         Book book = searchBook(book_id);
         if (book != null && book.getStatus() == Book.Status.BORROWED) {
-            book.setStatus(Book.Status.AVAILABLE);
+            book.returnBook();
+            return true;
+        }
+        return false;
+    }
+
+    private Movie searchMovie(int movie_id) {
+        for (Movie m : movies) {
+            if (m.getId() == movie_id) {
+                return m;
+            }
+        }
+        return null;
+    }
+
+    public boolean checkoutMovie(int movie_id) {
+        Movie movie = searchMovie(movie_id);
+        if (movie != null && movie.getStatus() == Movie.Status.AVAILABLE) {
+            movie.checkoutMovie();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean returnMovie(int movie_id) {
+        Movie movie = searchMovie(movie_id);
+        if (movie != null && movie.getStatus() == Movie.Status.BORROWED) {
+            movie.returnMovie();
             return true;
         }
         return false;

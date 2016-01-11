@@ -12,7 +12,6 @@ public class MovieTest {
     @Before
     public void setUp() throws Exception {
         movie = new Movie(1, "The Imitation Game", "Morten Tyldum", 2014, 8);
-
     }
 
     @Test
@@ -38,5 +37,23 @@ public class MovieTest {
     @Test
     public void movieHasId() throws Exception {
         assertEquals(1, movie.getId());
+    }
+
+    @Test
+    public void movieIsInitializedWithAvailableStatus() throws Exception {
+        assertEquals(Movie.Status.AVAILABLE, movie.getStatus());
+    }
+
+    @Test
+    public void movieCanBeBorrowed() throws Exception {
+        movie.checkoutMovie();
+        assertEquals(Movie.Status.BORROWED, movie.getStatus());
+    }
+
+    @Test
+    public void movieCanBeReturned() throws Exception {
+        movie.checkoutMovie();
+        movie.returnMovie();
+        assertEquals(Movie.Status.AVAILABLE, movie.getStatus());
     }
 }
