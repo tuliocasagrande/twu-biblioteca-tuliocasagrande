@@ -3,6 +3,8 @@ package com.twu.biblioteca;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -16,8 +18,10 @@ public class LibraryTest {
                 new Book(2, "Martin Fowler", "Refactoring: Improving the Design of Existing Code", 1999)};
         Movie[] movies = {new Movie(1, "The Imitation Game", "Morten Tyldum", 2014, 8),
                 new Movie(2, "The Wolf of Wall Street", "Martin Scorsese", 2013, 8)};
+        User[] users = {new User("123-1234", "weak_password", User.Type.CUSTOMER),
+                new User("121-1212", "1234", User.Type.LIBRARIAN)};
 
-        library = new Library(books, movies);
+        library = new Library(books, movies, users);
         library.checkoutBook(2);
         library.checkoutMovie(2);
     }
@@ -76,5 +80,15 @@ public class LibraryTest {
         assertTrue(library.getMovies()[1].getStatus() == Movie.Status.BORROWED);
         assertFalse(library.checkoutMovie(2));
         assertTrue(library.getMovies()[1].getStatus() == Movie.Status.BORROWED);
+    }
+
+    @Test
+    public void validCredentialsShouldAuthenticate() throws Exception {
+        assertNotNull(library.authenticate("123-1234", "weak_password"));
+    }
+
+    @Test
+    public void invalidCredentialsShouldNotAuthenticate() throws Exception {
+        assertNull(library.authenticate("123-1234", "wrong_password"));
     }
 }

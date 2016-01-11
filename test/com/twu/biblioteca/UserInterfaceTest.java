@@ -9,14 +9,14 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class UserInterfaceTest {
 
     private ByteArrayOutputStream outContent;
     private Library library;
     private UserInterface userInterface;
+    private User loggedUser;
 
     @Before
     public void setUp() throws Exception {
@@ -29,7 +29,11 @@ public class UserInterfaceTest {
         Movie[] movies = {new Movie(1, "The Imitation Game", "Morten Tyldum", 2014, 8),
                 new Movie(2, "The Wolf of Wall Street", "Martin Scorsese", 2013, 8)};
 
-        library = new Library(books, movies);
+        loggedUser = new User("123-1234", "weak_password", User.Type.CUSTOMER);
+        User[] users = {loggedUser,
+                new User("121-1212", "1234", User.Type.LIBRARIAN)};
+
+        library = new Library(books, movies, users);
         userInterface = new UserInterface();
     }
 
@@ -75,26 +79,26 @@ public class UserInterfaceTest {
 
     @Test
     public void invalidOptionShouldNotifyUser() throws Exception {
-        userInterface.handleMenuOption(-1, library);
+        userInterface.handleMenuOption(-1, library, loggedUser);
         assertEquals("\nSelect a valid option!\n", outContent.toString());
     }
 
     @Test
     public void optionZeroShouldSayGoodbye() throws Exception {
-        userInterface.handleMenuOption(0, library);
+        userInterface.handleMenuOption(0, library, loggedUser);
         assertEquals("\nSee you soon!\n", outContent.toString());
     }
 
     @Test
     public void optionOneShouldListBooks() throws Exception {
-        userInterface.handleMenuOption(1, library);
+        userInterface.handleMenuOption(1, library, loggedUser);
         assertTrue(outContent.toString().contains("These are the available books"));
     }
 
     @Test
     public void optionTwoShouldCheckoutBook() throws Exception {
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface().handleMenuOption(2, library);
+        new UserInterface().handleMenuOption(2, library, loggedUser);
         assertTrue(library.getBooks()[0].getStatus() == Book.Status.BORROWED);
     }
 
@@ -102,7 +106,7 @@ public class UserInterfaceTest {
     public void optionThreeShouldReturnBook() throws Exception {
         library.checkoutBook(1);
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface().handleMenuOption(3, library);
+        new UserInterface().handleMenuOption(3, library, loggedUser);
         assertTrue(library.getBooks()[0].getStatus() == Book.Status.AVAILABLE);
     }
 
@@ -153,14 +157,14 @@ public class UserInterfaceTest {
 
     @Test
     public void optionFourShouldListMovies() throws Exception {
-        userInterface.handleMenuOption(4, library);
+        userInterface.handleMenuOption(4, library, loggedUser);
         assertTrue(outContent.toString().contains("These are the available movies"));
     }
 
     @Test
     public void optionFiveShouldCheckoutMovie() throws Exception {
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface().handleMenuOption(5, library);
+        new UserInterface().handleMenuOption(5, library, loggedUser);
         assertTrue(library.getMovies()[0].getStatus() == Movie.Status.BORROWED);
     }
 
@@ -168,7 +172,7 @@ public class UserInterfaceTest {
     public void optionSixShouldReturnMovie() throws Exception {
         library.checkoutMovie(1);
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface().handleMenuOption(6, library);
+        new UserInterface().handleMenuOption(6, library, loggedUser);
         assertTrue(library.getMovies()[0].getStatus() == Movie.Status.AVAILABLE);
     }
 
@@ -206,4 +210,12 @@ public class UserInterfaceTest {
         userInterface.returnMovie(library, 200);
         assertEquals("That is not a valid movie to return.\n", outContent.toString());
     }
+
+    @Test
+    public void itShouldReadUserCredentials() throws Exception {
+        System.setIn(new ByteArrayInputStream("123-1234\nweak_password".getBytes()));
+        User user = new UserInterface().readUser(library);
+        assertNotNull(user);
+    }
+
 }

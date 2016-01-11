@@ -13,7 +13,7 @@ public class ArtifactClass {
     public void setUp() throws Exception {
         artifact = new Artifact(1);
     }
-    
+
     @Test
     public void artifactHasId() throws Exception {
         assertEquals(1, artifact.getId());

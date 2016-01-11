@@ -4,10 +4,12 @@ class Library {
 
     private final Book[] books;
     private final Movie[] movies;
+    private final User[] users;
 
-    public Library(Book[] books, Movie[] movies) {
+    public Library(Book[] books, Movie[] movies, User[] users) {
         this.books = books;
         this.movies = movies;
+        this.users = users;
     }
 
     public Book[] getBooks() {
@@ -16,6 +18,10 @@ class Library {
 
     public Movie[] getMovies() {
         return movies;
+    }
+
+    public User[] getUsers() {
+        return users;
     }
 
     private Artifact search(int id, Artifact[] artifacts) {
@@ -59,5 +65,15 @@ class Library {
 
     public boolean returnMovie(int movie_id) {
         return checkIn(movie_id, movies);
+    }
+
+    // DANGER!!! Missing cryptography!!!
+    public User authenticate(String libraryNumber, String password) {
+        for (User u : users) {
+            if (libraryNumber.equals(u.getLibraryNumber()) && password.equals(u.getPassword())) {
+                return u;
+            }
+        }
+        return null;
     }
 }

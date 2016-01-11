@@ -41,7 +41,7 @@ class UserInterface {
         }
     }
 
-    public void handleMenuOption(int option, Library library) {
+    public void handleMenuOption(int option, Library library, User user) {
         int id;
         switch (option) {
             case 1:
@@ -127,5 +127,23 @@ class UserInterface {
         } else {
             System.out.println("That movie is not available.");
         }
+    }
+
+    public User readUser(Library library) {
+        User user = null;
+        do {
+            try {
+                System.out.print("Library number: ");
+                String libraryNumber = input.readLine();
+                System.out.print("Password: ");
+                String password = input.readLine();
+                user = library.authenticate(libraryNumber, password);
+                if (user == null) {
+                    System.out.println("\nWrong library number or password!!! Please inform again.");
+                }
+            } catch (IOException ignored) {
+            }
+        } while (user == null);
+        return user;
     }
 }
