@@ -228,16 +228,44 @@ public class UserInterfaceTest {
     }
 
     @Test
-    public void librarianShouldSeeBorrowings() throws Exception {
+    public void librarianShouldSeeBorrowingsOption() throws Exception {
         userInterface.userLogin(librarian);
         userInterface.printMenu();
-        assertTrue(outContent.toString().contains("See borrowings"));
+        assertTrue(outContent.toString().contains("List borrowings"));
     }
 
     @Test
-    public void customerShouldNotSeeBorrowings() throws Exception {
+    public void customerShouldNotSeeBorrowingsOption() throws Exception {
         userInterface.userLogin(customer);
         userInterface.printMenu();
-        assertFalse(outContent.toString().contains("See borrowings"));
+        assertFalse(outContent.toString().contains("borrowings"));
+    }
+
+    @Test
+    public void guestShouldNotSeeUsersOptions() throws Exception {
+        userInterface.userLogout();
+        userInterface.printMenu();
+        assertFalse(outContent.toString().contains("Checkout"));
+        assertFalse(outContent.toString().contains("Return"));
+    }
+
+    @Test
+    public void optionSevenShouldListBorrowings() throws Exception {
+        userInterface.userLogin(librarian);
+        userInterface.handleMenuOption(7);
+        assertTrue(outContent.toString().contains("These are the borrowings"));
+    }
+
+    @Test
+    public void librarianShouldSeeBorrowings() throws Exception {
+        library.checkoutBook(1, customer);
+        library.checkoutMovie(1, customer);
+        userInterface.userLogin(librarian);
+        userInterface.listBorrowings();
+        String printed = String.format("%-5s %-7s %s\n", "ID", "Type", "Borrower") +
+                String.format("%-5s %-7s %s\n", "1", "book", "123-1234") +
+                String.format("%-5s %-7s %s\n", "1", "movie", "123-1234");
+
+        assertEquals(printed, outContent.toString());
     }
 }

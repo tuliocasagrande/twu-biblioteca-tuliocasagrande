@@ -32,7 +32,7 @@ class UserInterface {
             System.out.println("<6> Return Movie");
             System.out.println();
             if (user.isLibrarian()) {
-                System.out.println("<7> See borrowings");
+                System.out.println("<7> List borrowings");
                 System.out.println();
             }
             System.out.println("<9> Logout");
@@ -90,6 +90,7 @@ class UserInterface {
             case 7:
                 if (user.isLibrarian()) {
                     System.out.println("These are the borrowings:");
+                    listBorrowings();
                 } else {
                     System.out.println("\nSelect a valid option!");
                 }
@@ -102,6 +103,22 @@ class UserInterface {
                 break;
             default:
                 System.out.println("\nSelect a valid option!");
+        }
+    }
+
+    public void listBorrowings() {
+        System.out.printf("%-5s %-7s %s\n", "ID", "Type", "Borrower");
+
+        for (Book b : library.getBooks()) {
+            if (!b.isAvailable()) {
+                System.out.printf("%-5s %-7s %s\n", b.getId(), "book", b.getBorrower().getLibraryNumber());
+            }
+        }
+
+        for (Movie m : library.getMovies()) {
+            if (!m.isAvailable()) {
+                System.out.printf("%-5s %-7s %s\n", m.getId(), "movie", m.getBorrower().getLibraryNumber());
+            }
         }
     }
 
