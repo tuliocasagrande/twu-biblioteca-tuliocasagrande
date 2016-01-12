@@ -12,8 +12,8 @@ public class UserTest {
 
     @Before
     public void setUp() throws Exception {
-        user = new User("123-1234", "weak_password", User.Type.CUSTOMER);
-        librarian = new User("121-1212", "1234", User.Type.LIBRARIAN);
+        user = new User("123-1234", "weak_password", "John", "john@email.com", "9999-9999" ,User.Type.CUSTOMER);
+        librarian = new User("121-1212", "1234", "Jane", "jane@email.com", "9999-9999", User.Type.LIBRARIAN);
     }
 
     @Test
@@ -29,5 +29,20 @@ public class UserTest {
     @Test
     public void usersHaveAccessLevels() throws Exception {
         assertNotEquals(user.isLibrarian(), librarian.isLibrarian());
+    }
+
+    @Test
+    public void userHasName() throws Exception {
+        assertEquals("John", user.getName());
+    }
+
+    @Test
+    public void userHasEmail() throws Exception {
+        assertEquals("john@email.com", user.getEmail());
+    }
+
+    @Test
+    public void userHasPhoneNumber() throws Exception {
+        assertEquals("9999-9999", user.getPhoneNumber());
     }
 }

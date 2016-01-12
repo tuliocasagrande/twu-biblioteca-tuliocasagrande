@@ -35,6 +35,7 @@ class UserInterface {
                 System.out.println("<7> List borrowings");
                 System.out.println();
             }
+            System.out.println("<8> My profile");
             System.out.println("<9> Logout");
         } else {
             System.out.println("<9> Login");
@@ -94,6 +95,13 @@ class UserInterface {
                 } else {
                     System.out.println("\nSelect a valid option!");
                 }
+                break;
+            case 8:
+                System.out.println("\nProfile:");
+                System.out.println("Library number: " + user.getLibraryNumber());
+                System.out.println("Name: " + user.getName());
+                System.out.println("Email: " + user.getEmail());
+                System.out.println("Phone number: " + user.getPhoneNumber());
                 break;
             case 9:
                 handleLogin();

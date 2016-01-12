@@ -30,8 +30,8 @@ public class UserInterfaceTest {
         Movie[] movies = {new Movie(1, "The Imitation Game", "Morten Tyldum", 2014, 8),
                 new Movie(2, "The Wolf of Wall Street", "Martin Scorsese", 2013, 8)};
 
-        customer = new User("123-1234", "weak_password", User.Type.CUSTOMER);
-        librarian = new User("121-1212", "1234", User.Type.LIBRARIAN);
+        customer = new User("123-1234", "weak_password", "John", "john@email.com", "9999-9999" ,User.Type.CUSTOMER);
+        librarian = new User("121-1212", "1234", "Jane", "jane@email.com", "9999-9999", User.Type.LIBRARIAN);
         User[] users = {customer, librarian};
 
         library = new Library(books, movies, users);
@@ -247,6 +247,7 @@ public class UserInterfaceTest {
         userInterface.printMenu();
         assertFalse(outContent.toString().contains("Checkout"));
         assertFalse(outContent.toString().contains("Return"));
+        assertFalse(outContent.toString().contains("Profile"));
     }
 
     @Test
@@ -267,5 +268,15 @@ public class UserInterfaceTest {
                 String.format("%-5s %-7s %s\n", "1", "movie", "123-1234");
 
         assertEquals(printed, outContent.toString());
+    }
+
+    @Test
+    public void optionEightShouldShowUserInformation() throws Exception {
+        userInterface.userLogin(customer);
+        userInterface.handleMenuOption(8);
+        assertTrue(outContent.toString().contains("Profile:"));
+        assertTrue(outContent.toString().contains("Name:"));
+        assertTrue(outContent.toString().contains("Email:"));
+        assertTrue(outContent.toString().contains("Phone number:"));
     }
 }

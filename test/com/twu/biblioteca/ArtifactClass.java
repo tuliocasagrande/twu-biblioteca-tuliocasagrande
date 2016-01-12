@@ -13,7 +13,7 @@ public class ArtifactClass {
     @Before
     public void setUp() throws Exception {
         artifact = new Artifact(1);
-        customer = new User("123-1234", "weak_password", User.Type.CUSTOMER);
+        customer = new User("123-1234", "weak_password", "John", "john@email.com", "9999-9999" ,User.Type.CUSTOMER);
     }
 
     @Test
