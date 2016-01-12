@@ -15,16 +15,15 @@ class BibliotecaApp {
         User[] users = {new User("123-1234", "weak_password", User.Type.CUSTOMER),
                 new User("121-1212", "1234", User.Type.LIBRARIAN)};
 
-        Library library = new Library(books, movies, users);
-        UserInterface userInterface = new UserInterface();
+        UserInterface userInterface = new UserInterface(new Library(books, movies, users));
         userInterface.printWelcome();
-        User loggedUser = userInterface.readUser(library);
+        userInterface.logUser(userInterface.readUser());
 
         int option;
         do {
             userInterface.printMenu();
             option = userInterface.readInteger();
-            userInterface.handleMenuOption(option, library, loggedUser);
+            userInterface.handleMenuOption(option);
         } while (option != 0);
 
     }

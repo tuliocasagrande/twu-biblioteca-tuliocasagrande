@@ -16,7 +16,6 @@ public class UserInterfaceTest {
     private ByteArrayOutputStream outContent;
     private Library library;
     private UserInterface userInterface;
-    private User loggedUser;
 
     @Before
     public void setUp() throws Exception {
@@ -29,12 +28,13 @@ public class UserInterfaceTest {
         Movie[] movies = {new Movie(1, "The Imitation Game", "Morten Tyldum", 2014, 8),
                 new Movie(2, "The Wolf of Wall Street", "Martin Scorsese", 2013, 8)};
 
-        loggedUser = new User("123-1234", "weak_password", User.Type.CUSTOMER);
+        User loggedUser = new User("123-1234", "weak_password", User.Type.CUSTOMER);
         User[] users = {loggedUser,
                 new User("121-1212", "1234", User.Type.LIBRARIAN)};
 
         library = new Library(books, movies, users);
-        userInterface = new UserInterface();
+        userInterface = new UserInterface(library);
+        userInterface.logUser(loggedUser);
     }
 
     @After
@@ -51,7 +51,7 @@ public class UserInterfaceTest {
 
     @Test
     public void booksAreListed() throws Exception {
-        userInterface.listBooks(library);
+        userInterface.listBooks();
         String printed = String.format("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title") +
                 String.format("%-5s %-5s %-20s %s\n", "1", "2002", "Kent Beck", "Test Driven Development: By Example") +
                 String.format("%-5s %-5s %-20s %s\n", "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
@@ -68,37 +68,37 @@ public class UserInterfaceTest {
     @Test
     public void validReadShouldReturnAnInteger() throws Exception {
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        assertEquals(1, new UserInterface().readInteger());
+        assertEquals(1, new UserInterface(library).readInteger());
     }
 
     @Test
     public void invalidReadShouldReturnNegativeOne() throws Exception {
         System.setIn(new ByteArrayInputStream("asd".getBytes()));
-        assertEquals(-1, new UserInterface().readInteger());
+        assertEquals(-1, new UserInterface(library).readInteger());
     }
 
     @Test
     public void invalidOptionShouldNotifyUser() throws Exception {
-        userInterface.handleMenuOption(-1, library, loggedUser);
+        userInterface.handleMenuOption(-1);
         assertEquals("\nSelect a valid option!\n", outContent.toString());
     }
 
     @Test
     public void optionZeroShouldSayGoodbye() throws Exception {
-        userInterface.handleMenuOption(0, library, loggedUser);
+        userInterface.handleMenuOption(0);
         assertEquals("\nSee you soon!\n", outContent.toString());
     }
 
     @Test
     public void optionOneShouldListBooks() throws Exception {
-        userInterface.handleMenuOption(1, library, loggedUser);
+        userInterface.handleMenuOption(1);
         assertTrue(outContent.toString().contains("These are the available books"));
     }
 
     @Test
     public void optionTwoShouldCheckoutBook() throws Exception {
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface().handleMenuOption(2, library, loggedUser);
+        new UserInterface(library).handleMenuOption(2);
         assertTrue(library.getBooks()[0].getStatus() == Book.Status.BORROWED);
     }
 
@@ -106,14 +106,14 @@ public class UserInterfaceTest {
     public void optionThreeShouldReturnBook() throws Exception {
         library.checkoutBook(1);
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface().handleMenuOption(3, library, loggedUser);
+        new UserInterface(library).handleMenuOption(3);
         assertTrue(library.getBooks()[0].getStatus() == Book.Status.AVAILABLE);
     }
 
     @Test
     public void borrowedBookShouldNotBeListed() throws Exception {
         library.checkoutBook(1);
-        userInterface.listBooks(library);
+        userInterface.listBooks();
         String printed = String.format("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title") +
                 String.format("%-5s %-5s %-20s %s\n", "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
 
@@ -122,32 +122,32 @@ public class UserInterfaceTest {
 
     @Test
     public void aSuccessfulCheckedOutBookShouldNotifyUser() throws Exception {
-        userInterface.checkoutBook(library, 1);
+        userInterface.checkoutBook(1);
         assertEquals("Thank you! Enjoy the book.\n", outContent.toString());
     }
 
     @Test
     public void anUnsuccessfulCheckOutBookShouldNotifyUser() throws Exception {
-        userInterface.checkoutBook(library, 100);
+        userInterface.checkoutBook(100);
         assertEquals("That book is not available.\n", outContent.toString());
     }
 
     @Test
     public void aSuccessfulReturnedBookShouldNotifyUser() throws Exception {
         library.checkoutBook(2);
-        userInterface.returnBook(library, 2);
+        userInterface.returnBook(2);
         assertEquals("Thank you for returning the book.\n", outContent.toString());
     }
 
     @Test
     public void anUnsuccessfulReturnedBookShouldNotifyUser() throws Exception {
-        userInterface.returnBook(library, 200);
+        userInterface.returnBook(200);
         assertEquals("That is not a valid book to return.\n", outContent.toString());
     }
 
     @Test
     public void moviesAreListed() throws Exception {
-        userInterface.listMovies(library);
+        userInterface.listMovies();
         String printed = String.format("%-5s %-5s %-7s %-20s %s\n", "ID", "Year", "Rating", "Director", "Title") +
                 String.format("%-5s %-5s %-7s %-20s %s\n", "1", "2014", "8", "Morten Tyldum", "The Imitation Game") +
                 String.format("%-5s %-5s %-7s %-20s %s\n", "2", "2013", "8", "Martin Scorsese", "The Wolf of Wall Street");
@@ -157,14 +157,14 @@ public class UserInterfaceTest {
 
     @Test
     public void optionFourShouldListMovies() throws Exception {
-        userInterface.handleMenuOption(4, library, loggedUser);
+        userInterface.handleMenuOption(4);
         assertTrue(outContent.toString().contains("These are the available movies"));
     }
 
     @Test
     public void optionFiveShouldCheckoutMovie() throws Exception {
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface().handleMenuOption(5, library, loggedUser);
+        new UserInterface(library).handleMenuOption(5);
         assertTrue(library.getMovies()[0].getStatus() == Movie.Status.BORROWED);
     }
 
@@ -172,14 +172,14 @@ public class UserInterfaceTest {
     public void optionSixShouldReturnMovie() throws Exception {
         library.checkoutMovie(1);
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface().handleMenuOption(6, library, loggedUser);
+        new UserInterface(library).handleMenuOption(6);
         assertTrue(library.getMovies()[0].getStatus() == Movie.Status.AVAILABLE);
     }
 
     @Test
     public void borrowedMovieShouldNotBeListed() throws Exception {
         library.checkoutMovie(1);
-        userInterface.listMovies(library);
+        userInterface.listMovies();
         String printed = String.format("%-5s %-5s %-7s %-20s %s\n", "ID", "Year", "Rating", "Director", "Title") +
                 String.format("%-5s %-5s %-7s %-20s %s\n", "2", "2013", "8", "Martin Scorsese", "The Wolf of Wall Street");
 
@@ -188,33 +188,33 @@ public class UserInterfaceTest {
 
     @Test
     public void aSuccessfulCheckedOutMovieShouldNotifyUser() throws Exception {
-        userInterface.checkoutMovie(library, 1);
+        userInterface.checkoutMovie(1);
         assertEquals("Thank you! Enjoy the movie.\n", outContent.toString());
     }
 
     @Test
     public void anUnsuccessfulCheckedOutMovieShouldNotifyUser() throws Exception {
-        userInterface.checkoutMovie(library, 100);
+        userInterface.checkoutMovie(100);
         assertEquals("That movie is not available.\n", outContent.toString());
     }
 
     @Test
     public void aSuccessfulReturnedMovieShouldNotifyUser() throws Exception {
         library.checkoutMovie(2);
-        userInterface.returnMovie(library, 2);
+        userInterface.returnMovie(2);
         assertEquals("Thank you for returning the movie.\n", outContent.toString());
     }
 
     @Test
     public void anUnsuccessfulReturnedMovieShouldNotifyUser() throws Exception {
-        userInterface.returnMovie(library, 200);
+        userInterface.returnMovie(200);
         assertEquals("That is not a valid movie to return.\n", outContent.toString());
     }
 
     @Test
     public void itShouldReadUserCredentials() throws Exception {
         System.setIn(new ByteArrayInputStream("123-1234\nweak_password".getBytes()));
-        User user = new UserInterface().readUser(library);
+        User user = new UserInterface(library).readUser();
         assertNotNull(user);
     }
 

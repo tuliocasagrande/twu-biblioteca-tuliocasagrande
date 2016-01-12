@@ -7,9 +7,12 @@ import java.io.InputStreamReader;
 class UserInterface {
 
     private final BufferedReader input;
+    private final Library library;
+    private User loggedUser;
 
-    public UserInterface() {
-        input = new BufferedReader(new InputStreamReader(System.in));
+    public UserInterface(Library library) {
+        this.input = new BufferedReader(new InputStreamReader(System.in));
+        this.library = library;
     }
 
     public void printWelcome() {
@@ -41,32 +44,32 @@ class UserInterface {
         }
     }
 
-    public void handleMenuOption(int option, Library library, User user) {
+    public void handleMenuOption(int option) {
         int id;
         switch (option) {
             case 1:
                 System.out.println("\nThese are the available books:");
-                listBooks(library);
+                listBooks();
                 break;
             case 2:
                 id = readInteger();
-                checkoutBook(library, id);
+                checkoutBook(id);
                 break;
             case 3:
                 id = readInteger();
-                returnBook(library, id);
+                returnBook(id);
                 break;
             case 4:
                 System.out.println("\nThese are the available movies:");
-                listMovies(library);
+                listMovies();
                 break;
             case 5:
                 id = readInteger();
-                checkoutMovie(library, id);
+                checkoutMovie(id);
                 break;
             case 6:
                 id = readInteger();
-                returnMovie(library, id);
+                returnMovie(id);
                 break;
             case 0:
                 System.out.println("\nSee you soon!");
@@ -76,7 +79,7 @@ class UserInterface {
         }
     }
 
-    public void listBooks(Library library) {
+    public void listBooks() {
         System.out.printf("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title");
 
         for (Book b : library.getBooks()) {
@@ -86,7 +89,7 @@ class UserInterface {
         }
     }
 
-    public void returnBook(Library library, int book_id) {
+    public void returnBook(int book_id) {
         if (library.returnBook(book_id)) {
             System.out.println("Thank you for returning the book.");
         } else {
@@ -94,7 +97,7 @@ class UserInterface {
         }
     }
 
-    public void checkoutBook(Library library, int book_id) {
+    public void checkoutBook(int book_id) {
         if (library.checkoutBook(book_id)) {
             System.out.println("Thank you! Enjoy the book.");
         } else {
@@ -102,7 +105,7 @@ class UserInterface {
         }
     }
 
-    public void listMovies(Library library) {
+    public void listMovies() {
         System.out.printf("%-5s %-5s %-7s %-20s %s\n", "ID", "Year", "Rating", "Director", "Title");
 
         for (Movie m : library.getMovies()) {
@@ -113,7 +116,7 @@ class UserInterface {
         }
     }
 
-    public void returnMovie(Library library, int movie_id) {
+    public void returnMovie(int movie_id) {
         if (library.returnMovie(movie_id)) {
             System.out.println("Thank you for returning the movie.");
         } else {
@@ -121,7 +124,7 @@ class UserInterface {
         }
     }
 
-    public void checkoutMovie(Library library, int movie_id) {
+    public void checkoutMovie(int movie_id) {
         if (library.checkoutMovie(movie_id)) {
             System.out.println("Thank you! Enjoy the movie.");
         } else {
@@ -129,7 +132,7 @@ class UserInterface {
         }
     }
 
-    public User readUser(Library library) {
+    public User readUser() {
         User user = null;
         do {
             try {
@@ -146,4 +149,9 @@ class UserInterface {
         } while (user == null);
         return user;
     }
+
+    public void logUser(User user) {
+        this.loggedUser = user;
+    }
+
 }
