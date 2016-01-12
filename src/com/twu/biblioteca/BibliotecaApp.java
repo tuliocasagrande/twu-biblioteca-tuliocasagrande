@@ -17,7 +17,6 @@ class BibliotecaApp {
 
         UserInterface userInterface = new UserInterface(new Library(books, movies, users));
         userInterface.printWelcome();
-        userInterface.logUser(userInterface.readUser());
 
         int option;
         do {

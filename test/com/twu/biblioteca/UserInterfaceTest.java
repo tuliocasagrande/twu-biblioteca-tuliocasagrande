@@ -16,6 +16,8 @@ public class UserInterfaceTest {
     private ByteArrayOutputStream outContent;
     private Library library;
     private UserInterface userInterface;
+    private User customer;
+    private User librarian;
 
     @Before
     public void setUp() throws Exception {
@@ -28,13 +30,12 @@ public class UserInterfaceTest {
         Movie[] movies = {new Movie(1, "The Imitation Game", "Morten Tyldum", 2014, 8),
                 new Movie(2, "The Wolf of Wall Street", "Martin Scorsese", 2013, 8)};
 
-        User loggedUser = new User("123-1234", "weak_password", User.Type.CUSTOMER);
-        User[] users = {loggedUser,
-                new User("121-1212", "1234", User.Type.LIBRARIAN)};
+        customer = new User("123-1234", "weak_password", User.Type.CUSTOMER);
+        librarian = new User("121-1212", "1234", User.Type.LIBRARIAN);
+        User[] users = {customer, librarian};
 
         library = new Library(books, movies, users);
         userInterface = new UserInterface(library);
-        userInterface.logUser(loggedUser);
     }
 
     @After
@@ -96,17 +97,21 @@ public class UserInterfaceTest {
     }
 
     @Test
-    public void optionTwoShouldCheckoutBook() throws Exception {
+    public void optionThreeShouldCheckoutBook() throws Exception {
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface(library).handleMenuOption(2);
+        userInterface = new UserInterface(library);
+        userInterface.userLogin(customer);
+        userInterface.handleMenuOption(3);
         assertTrue(library.getBooks()[0].getStatus() == Book.Status.BORROWED);
     }
 
     @Test
-    public void optionThreeShouldReturnBook() throws Exception {
+    public void optionFiveShouldReturnBook() throws Exception {
         library.checkoutBook(1);
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface(library).handleMenuOption(3);
+        userInterface = new UserInterface(library);
+        userInterface.userLogin(customer);
+        userInterface.handleMenuOption(5);
         assertTrue(library.getBooks()[0].getStatus() == Book.Status.AVAILABLE);
     }
 
@@ -156,15 +161,17 @@ public class UserInterfaceTest {
     }
 
     @Test
-    public void optionFourShouldListMovies() throws Exception {
-        userInterface.handleMenuOption(4);
+    public void optionTwoShouldListMovies() throws Exception {
+        userInterface.handleMenuOption(2);
         assertTrue(outContent.toString().contains("These are the available movies"));
     }
 
     @Test
-    public void optionFiveShouldCheckoutMovie() throws Exception {
+    public void optionFourShouldCheckoutMovie() throws Exception {
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface(library).handleMenuOption(5);
+        userInterface = new UserInterface(library);
+        userInterface.userLogin(customer);
+        userInterface.handleMenuOption(4);
         assertTrue(library.getMovies()[0].getStatus() == Movie.Status.BORROWED);
     }
 
@@ -172,7 +179,9 @@ public class UserInterfaceTest {
     public void optionSixShouldReturnMovie() throws Exception {
         library.checkoutMovie(1);
         System.setIn(new ByteArrayInputStream("1".getBytes()));
-        new UserInterface(library).handleMenuOption(6);
+        userInterface = new UserInterface(library);
+        userInterface.userLogin(customer);
+        userInterface.handleMenuOption(6);
         assertTrue(library.getMovies()[0].getStatus() == Movie.Status.AVAILABLE);
     }
 
@@ -218,4 +227,17 @@ public class UserInterfaceTest {
         assertNotNull(user);
     }
 
+    @Test
+    public void librarianShouldSeeBorrowings() throws Exception {
+        userInterface.userLogin(librarian);
+        userInterface.printMenu();
+        assertTrue(outContent.toString().contains("See borrowings"));
+    }
+
+    @Test
+    public void customerShouldNotSeeBorrowings() throws Exception {
+        userInterface.userLogin(customer);
+        userInterface.printMenu();
+        assertFalse(outContent.toString().contains("See borrowings"));
+    }
 }

@@ -8,7 +8,7 @@ class UserInterface {
 
     private final BufferedReader input;
     private final Library library;
-    private User loggedUser;
+    private User user;
 
     public UserInterface(Library library) {
         this.input = new BufferedReader(new InputStreamReader(System.in));
@@ -22,12 +22,23 @@ class UserInterface {
     public void printMenu() {
         System.out.println("\nMain menu:");
         System.out.println("<1> List Books");
-        System.out.println("<2> Checkout Book");
-        System.out.println("<3> Return Book");
+        System.out.println("<2> List Movies");
         System.out.println();
-        System.out.println("<4> List Movies");
-        System.out.println("<5> Checkout Book");
-        System.out.println("<6> Return Book");
+        if (userIsLogged()) {
+            System.out.println("<3> Checkout Book");
+            System.out.println("<4> Checkout Movie");
+            System.out.println();
+            System.out.println("<5> Return Book");
+            System.out.println("<6> Return Movie");
+            System.out.println();
+            if (user.isLibrarian()) {
+                System.out.println("<7> See borrowings");
+                System.out.println();
+            }
+            System.out.println("<9> Logout");
+        } else {
+            System.out.println("<9> Login");
+        }
         System.out.println();
         System.out.println("<0> Quit");
         System.out.println();
@@ -46,36 +57,59 @@ class UserInterface {
 
     public void handleMenuOption(int option) {
         int id;
+
+        if (!userIsLogged() && option > 2 && option < 9) {
+            option = -1;
+        }
+
         switch (option) {
             case 1:
                 System.out.println("\nThese are the available books:");
                 listBooks();
                 break;
             case 2:
-                id = readInteger();
-                checkoutBook(id);
-                break;
-            case 3:
-                id = readInteger();
-                returnBook(id);
-                break;
-            case 4:
                 System.out.println("\nThese are the available movies:");
                 listMovies();
                 break;
-            case 5:
+            case 3:
+                id = readInteger();
+                checkoutBook(id);
+                break;
+            case 4:
                 id = readInteger();
                 checkoutMovie(id);
+                break;
+            case 5:
+                id = readInteger();
+                returnBook(id);
                 break;
             case 6:
                 id = readInteger();
                 returnMovie(id);
+                break;
+            case 7:
+                if (user.isLibrarian()) {
+                    System.out.println("These are the borrowings:");
+                } else {
+                    System.out.println("\nSelect a valid option!");
+                }
+                break;
+            case 9:
+                handleLogin();
                 break;
             case 0:
                 System.out.println("\nSee you soon!");
                 break;
             default:
                 System.out.println("\nSelect a valid option!");
+        }
+    }
+
+    private void handleLogin() {
+        if (userIsLogged()) {
+            userLogout();
+        } else {
+            userLogin(readUser());
         }
     }
 
@@ -150,8 +184,13 @@ class UserInterface {
         return user;
     }
 
-    public void logUser(User user) {
-        this.loggedUser = user;
+    public void userLogin(User user) {
+        this.user = user;
     }
-
+    public void userLogout() {
+        this.user = null;
+    }
+    private boolean userIsLogged() {
+        return user != null;
+    }
 }

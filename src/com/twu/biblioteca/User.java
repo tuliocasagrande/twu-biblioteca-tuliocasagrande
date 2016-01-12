@@ -19,8 +19,8 @@ public class User {
         return password;
     }
 
-    public Type getType() {
-        return type;
+    public boolean isLibrarian() {
+        return type == Type.LIBRARIAN;
     }
 
     public enum Type {CUSTOMER, LIBRARIAN}

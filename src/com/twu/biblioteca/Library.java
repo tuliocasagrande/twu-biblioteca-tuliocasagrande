@@ -20,10 +20,6 @@ class Library {
         return movies;
     }
 
-    public User[] getUsers() {
-        return users;
-    }
-
     private Artifact search(int id, Artifact[] artifacts) {
         for (Artifact artifact : artifacts) {
             if (artifact.getId() == id) {
