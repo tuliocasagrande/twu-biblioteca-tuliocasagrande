@@ -29,10 +29,10 @@ class Library {
         return null;
     }
 
-    private boolean checkOut(int id, Artifact[] artifacts) {
+    private boolean checkOut(int id, Artifact[] artifacts, User borrower) {
         Artifact artifact = search(id, artifacts);
         if (artifact != null && artifact.isAvailable()) {
-            artifact.checkOut();
+            artifact.checkOut(borrower);
             return true;
         }
         return false;
@@ -47,16 +47,16 @@ class Library {
         return false;
     }
 
-    public boolean checkoutBook(int book_id) {
-        return checkOut(book_id, books);
+    public boolean checkoutBook(int book_id, User borrower) {
+        return checkOut(book_id, books, borrower);
     }
 
     public boolean returnBook(int book_id) {
         return checkIn(book_id, books);
     }
 
-    public boolean checkoutMovie(int movie_id) {
-        return checkOut(movie_id, movies);
+    public boolean checkoutMovie(int movie_id, User borrower) {
+        return checkOut(movie_id, movies, borrower);
     }
 
     public boolean returnMovie(int movie_id) {

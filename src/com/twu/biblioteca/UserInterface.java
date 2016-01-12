@@ -132,7 +132,7 @@ class UserInterface {
     }
 
     public void checkoutBook(int book_id) {
-        if (library.checkoutBook(book_id)) {
+        if (library.checkoutBook(book_id, user)) {
             System.out.println("Thank you! Enjoy the book.");
         } else {
             System.out.println("That book is not available.");
@@ -159,7 +159,7 @@ class UserInterface {
     }
 
     public void checkoutMovie(int movie_id) {
-        if (library.checkoutMovie(movie_id)) {
+        if (library.checkoutMovie(movie_id, user)) {
             System.out.println("Thank you! Enjoy the movie.");
         } else {
             System.out.println("That movie is not available.");

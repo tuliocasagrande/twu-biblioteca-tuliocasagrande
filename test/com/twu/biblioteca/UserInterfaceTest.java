@@ -107,7 +107,7 @@ public class UserInterfaceTest {
 
     @Test
     public void optionFiveShouldReturnBook() throws Exception {
-        library.checkoutBook(1);
+        library.checkoutBook(1, customer);
         System.setIn(new ByteArrayInputStream("1".getBytes()));
         userInterface = new UserInterface(library);
         userInterface.userLogin(customer);
@@ -117,7 +117,7 @@ public class UserInterfaceTest {
 
     @Test
     public void borrowedBookShouldNotBeListed() throws Exception {
-        library.checkoutBook(1);
+        library.checkoutBook(1, customer);
         userInterface.listBooks();
         String printed = String.format("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title") +
                 String.format("%-5s %-5s %-20s %s\n", "2", "1999", "Martin Fowler", "Refactoring: Improving the Design of Existing Code");
@@ -139,7 +139,7 @@ public class UserInterfaceTest {
 
     @Test
     public void aSuccessfulReturnedBookShouldNotifyUser() throws Exception {
-        library.checkoutBook(2);
+        library.checkoutBook(2, customer);
         userInterface.returnBook(2);
         assertEquals("Thank you for returning the book.\n", outContent.toString());
     }
@@ -177,7 +177,7 @@ public class UserInterfaceTest {
 
     @Test
     public void optionSixShouldReturnMovie() throws Exception {
-        library.checkoutMovie(1);
+        library.checkoutMovie(1, customer);
         System.setIn(new ByteArrayInputStream("1".getBytes()));
         userInterface = new UserInterface(library);
         userInterface.userLogin(customer);
@@ -187,7 +187,7 @@ public class UserInterfaceTest {
 
     @Test
     public void borrowedMovieShouldNotBeListed() throws Exception {
-        library.checkoutMovie(1);
+        library.checkoutMovie(1, customer);
         userInterface.listMovies();
         String printed = String.format("%-5s %-5s %-7s %-20s %s\n", "ID", "Year", "Rating", "Director", "Title") +
                 String.format("%-5s %-5s %-7s %-20s %s\n", "2", "2013", "8", "Martin Scorsese", "The Wolf of Wall Street");
@@ -209,7 +209,7 @@ public class UserInterfaceTest {
 
     @Test
     public void aSuccessfulReturnedMovieShouldNotifyUser() throws Exception {
-        library.checkoutMovie(2);
+        library.checkoutMovie(2, customer);
         userInterface.returnMovie(2);
         assertEquals("Thank you for returning the movie.\n", outContent.toString());
     }
