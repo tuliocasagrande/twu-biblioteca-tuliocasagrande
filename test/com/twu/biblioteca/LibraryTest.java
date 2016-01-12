@@ -28,58 +28,58 @@ public class LibraryTest {
 
     @Test
     public void anAvailableBookCanBeCheckedOut() throws Exception {
-        assertTrue(library.getBooks()[0].getStatus() == Book.Status.AVAILABLE);
+        assertTrue(library.getBooks()[0].isAvailable());
         assertTrue(library.checkoutBook(1));
-        assertTrue(library.getBooks()[0].getStatus() == Book.Status.BORROWED);
+        assertFalse(library.getBooks()[0].isAvailable());
     }
 
     @Test
     public void aBorrowedBookCanBeReturned() throws Exception {
-        assertTrue(library.getBooks()[1].getStatus() == Book.Status.BORROWED);
+        assertFalse(library.getBooks()[1].isAvailable());
         assertTrue(library.returnBook(2));
-        assertTrue(library.getBooks()[1].getStatus() == Book.Status.AVAILABLE);
+        assertTrue(library.getBooks()[1].isAvailable());
     }
 
     @Test
     public void anAvailableBookCannotBeReturned() throws Exception {
-        assertTrue(library.getBooks()[0].getStatus() == Book.Status.AVAILABLE);
+        assertTrue(library.getBooks()[0].isAvailable());
         assertFalse(library.returnBook(1));
-        assertTrue(library.getBooks()[0].getStatus() == Book.Status.AVAILABLE);
+        assertTrue(library.getBooks()[0].isAvailable());
     }
 
     @Test
     public void aBorrowedBookCannotBeCheckedOut() throws Exception {
-        assertTrue(library.getBooks()[1].getStatus() == Book.Status.BORROWED);
+        assertFalse(library.getBooks()[1].isAvailable());
         assertFalse(library.checkoutBook(2));
-        assertTrue(library.getBooks()[1].getStatus() == Book.Status.BORROWED);
+        assertFalse(library.getBooks()[1].isAvailable());
     }
 
     @Test
     public void anAvailableMovieCanBeCheckedOut() throws Exception {
-        assertTrue(library.getMovies()[0].getStatus() == Movie.Status.AVAILABLE);
+        assertTrue(library.getMovies()[0].isAvailable());
         assertTrue(library.checkoutMovie(1));
-        assertTrue(library.getMovies()[0].getStatus() == Movie.Status.BORROWED);
+        assertFalse(library.getMovies()[0].isAvailable());
     }
 
     @Test
     public void aBorrowedMovieCanBeReturned() throws Exception {
-        assertTrue(library.getMovies()[1].getStatus() == Movie.Status.BORROWED);
+        assertFalse(library.getMovies()[1].isAvailable());
         assertTrue(library.returnMovie(2));
-        assertTrue(library.getMovies()[1].getStatus() == Movie.Status.AVAILABLE);
+        assertTrue(library.getMovies()[1].isAvailable());
     }
 
     @Test
     public void anAvailableMovieCannotBeReturned() throws Exception {
-        assertTrue(library.getMovies()[0].getStatus() == Movie.Status.AVAILABLE);
+        assertTrue(library.getMovies()[0].isAvailable());
         assertFalse(library.returnMovie(1));
-        assertTrue(library.getMovies()[0].getStatus() == Movie.Status.AVAILABLE);
+        assertTrue(library.getMovies()[0].isAvailable());
     }
 
     @Test
     public void aBorrowedMovieCannotBeCheckedOut() throws Exception {
-        assertTrue(library.getMovies()[1].getStatus() == Movie.Status.BORROWED);
+        assertFalse(library.getMovies()[1].isAvailable());
         assertFalse(library.checkoutMovie(2));
-        assertTrue(library.getMovies()[1].getStatus() == Movie.Status.BORROWED);
+        assertFalse(library.getMovies()[1].isAvailable());
     }
 
     @Test

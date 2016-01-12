@@ -13,8 +13,8 @@ public class Artifact {
         return id;
     }
 
-    public Status getStatus() {
-        return status;
+    public boolean isAvailable() {
+        return status == Status.AVAILABLE;
     }
 
     public void checkOut() {
@@ -25,5 +25,5 @@ public class Artifact {
         this.status = Status.AVAILABLE;
     }
 
-    public enum Status {AVAILABLE, BORROWED}
+    private enum Status {AVAILABLE, BORROWED}
 }

@@ -31,7 +31,7 @@ class Library {
 
     private boolean checkOut(int id, Artifact[] artifacts) {
         Artifact artifact = search(id, artifacts);
-        if (artifact != null && artifact.getStatus() == Artifact.Status.AVAILABLE) {
+        if (artifact != null && artifact.isAvailable()) {
             artifact.checkOut();
             return true;
         }
@@ -40,7 +40,7 @@ class Library {
 
     private boolean checkIn(int id, Artifact[] artifacts) {
         Artifact artifact = search(id, artifacts);
-        if (artifact != null && artifact.getStatus() == Artifact.Status.BORROWED) {
+        if (artifact != null && !artifact.isAvailable()) {
             artifact.checkIn();
             return true;
         }

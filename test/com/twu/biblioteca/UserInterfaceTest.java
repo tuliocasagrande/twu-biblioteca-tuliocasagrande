@@ -102,7 +102,7 @@ public class UserInterfaceTest {
         userInterface = new UserInterface(library);
         userInterface.userLogin(customer);
         userInterface.handleMenuOption(3);
-        assertTrue(library.getBooks()[0].getStatus() == Book.Status.BORROWED);
+        assertFalse(library.getBooks()[0].isAvailable());
     }
 
     @Test
@@ -112,7 +112,7 @@ public class UserInterfaceTest {
         userInterface = new UserInterface(library);
         userInterface.userLogin(customer);
         userInterface.handleMenuOption(5);
-        assertTrue(library.getBooks()[0].getStatus() == Book.Status.AVAILABLE);
+        assertTrue(library.getBooks()[0].isAvailable());
     }
 
     @Test
@@ -172,7 +172,7 @@ public class UserInterfaceTest {
         userInterface = new UserInterface(library);
         userInterface.userLogin(customer);
         userInterface.handleMenuOption(4);
-        assertTrue(library.getMovies()[0].getStatus() == Movie.Status.BORROWED);
+        assertFalse(library.getMovies()[0].isAvailable());
     }
 
     @Test
@@ -182,7 +182,7 @@ public class UserInterfaceTest {
         userInterface = new UserInterface(library);
         userInterface.userLogin(customer);
         userInterface.handleMenuOption(6);
-        assertTrue(library.getMovies()[0].getStatus() == Movie.Status.AVAILABLE);
+        assertTrue(library.getMovies()[0].isAvailable());
     }
 
     @Test

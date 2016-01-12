@@ -117,7 +117,7 @@ class UserInterface {
         System.out.printf("%-5s %-5s %-20s %s\n", "ID", "Year", "Author", "Title");
 
         for (Book b : library.getBooks()) {
-            if (b.getStatus() == Book.Status.AVAILABLE) {
+            if (b.isAvailable()) {
                 System.out.printf("%-5s %-5s %-20s %s\n", b.getId(), b.getYear(), b.getAuthor(), b.getTitle());
             }
         }
@@ -143,7 +143,7 @@ class UserInterface {
         System.out.printf("%-5s %-5s %-7s %-20s %s\n", "ID", "Year", "Rating", "Director", "Title");
 
         for (Movie m : library.getMovies()) {
-            if (m.getStatus() == Movie.Status.AVAILABLE) {
+            if (m.isAvailable()) {
                 System.out.printf("%-5s %-5s %-7s %-20s %s\n", m.getId(), m.getYear(),
                         m.getRating(), m.getDirector(), m.getTitle());
             }
