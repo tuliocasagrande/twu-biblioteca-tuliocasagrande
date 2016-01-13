@@ -12,7 +12,7 @@ class BibliotecaApp {
                 new Movie(2, "The Wolf of Wall Street", "Martin Scorsese", 2013, 8),
                 new Movie(3, "The Avengers", "Joss Whedon", 2012, 9)};
 
-        User[] users = {new User("123-1234", "weak_password", "John", "john@email.com", "9999-9999" ,User.Type.CUSTOMER),
+        User[] users = {new User("123-1234", "weak_password", "John", "john@email.com", "9999-9999", User.Type.CUSTOMER),
                 new User("121-1212", "1234", "Jane", "jane@email.com", "9999-9999", User.Type.LIBRARIAN)};
 
         UserInterface userInterface = new UserInterface(new Library(books, movies, users));

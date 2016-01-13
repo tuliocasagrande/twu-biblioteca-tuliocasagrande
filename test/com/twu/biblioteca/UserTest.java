@@ -3,7 +3,8 @@ package com.twu.biblioteca;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class UserTest {
 
@@ -12,7 +13,7 @@ public class UserTest {
 
     @Before
     public void setUp() throws Exception {
-        user = new User("123-1234", "weak_password", "John", "john@email.com", "9999-9999" ,User.Type.CUSTOMER);
+        user = new User("123-1234", "weak_password", "John", "john@email.com", "9999-9999", User.Type.CUSTOMER);
         librarian = new User("121-1212", "1234", "Jane", "jane@email.com", "9999-9999", User.Type.LIBRARIAN);
     }
 

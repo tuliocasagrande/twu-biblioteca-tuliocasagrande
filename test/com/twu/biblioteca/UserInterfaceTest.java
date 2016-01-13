@@ -30,7 +30,7 @@ public class UserInterfaceTest {
         Movie[] movies = {new Movie(1, "The Imitation Game", "Morten Tyldum", 2014, 8),
                 new Movie(2, "The Wolf of Wall Street", "Martin Scorsese", 2013, 8)};
 
-        customer = new User("123-1234", "weak_password", "John", "john@email.com", "9999-9999" ,User.Type.CUSTOMER);
+        customer = new User("123-1234", "weak_password", "John", "john@email.com", "9999-9999", User.Type.CUSTOMER);
         librarian = new User("121-1212", "1234", "Jane", "jane@email.com", "9999-9999", User.Type.LIBRARIAN);
         User[] users = {customer, librarian};
 
@@ -140,6 +140,7 @@ public class UserInterfaceTest {
     @Test
     public void aSuccessfulReturnedBookShouldNotifyUser() throws Exception {
         library.checkoutBook(2, customer);
+        userInterface.userLogin(customer);
         userInterface.returnBook(2);
         assertEquals("Thank you for returning the book.\n", outContent.toString());
     }
@@ -210,6 +211,7 @@ public class UserInterfaceTest {
     @Test
     public void aSuccessfulReturnedMovieShouldNotifyUser() throws Exception {
         library.checkoutMovie(2, customer);
+        userInterface.userLogin(customer);
         userInterface.returnMovie(2);
         assertEquals("Thank you for returning the movie.\n", outContent.toString());
     }

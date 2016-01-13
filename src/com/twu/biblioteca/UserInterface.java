@@ -149,7 +149,7 @@ class UserInterface {
     }
 
     public void returnBook(int book_id) {
-        if (library.returnBook(book_id)) {
+        if (library.returnBook(book_id, user)) {
             System.out.println("Thank you for returning the book.");
         } else {
             System.out.println("That is not a valid book to return.");
@@ -176,7 +176,7 @@ class UserInterface {
     }
 
     public void returnMovie(int movie_id) {
-        if (library.returnMovie(movie_id)) {
+        if (library.returnMovie(movie_id, user)) {
             System.out.println("Thank you for returning the movie.");
         } else {
             System.out.println("That is not a valid movie to return.");
@@ -212,9 +212,11 @@ class UserInterface {
     public void userLogin(User user) {
         this.user = user;
     }
+
     public void userLogout() {
         this.user = null;
     }
+
     private boolean userIsLogged() {
         return user != null;
     }
